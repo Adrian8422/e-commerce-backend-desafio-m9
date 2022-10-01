@@ -25,6 +25,20 @@ export async function sendEmailToUser(emailUser, code) {
       console.log("aca esta", error);
     });
 }
+export async function sendEmailSuccessSale(emailUser) {
+  let info = transporter
+    .sendMail({
+      from: '"Forgot password 👻" <manbassman1996@gmail.com>', // sender address
+      to: emailUser, // list of receivers
+      subject: ` `, // Subject line
+      text: ` `, // plain text body
+      html: `<strong> Pedido comprado con éxito :D </strong>
+ `, // html body
+    })
+    .catch((error) => {
+      console.log("aca esta", error);
+    });
+}
 // send mail with defined transport object
 
 transporter.verify().then(() => {

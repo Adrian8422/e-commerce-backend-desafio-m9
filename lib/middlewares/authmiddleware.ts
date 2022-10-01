@@ -6,14 +6,13 @@ export function authMiddleware(callback) {
   return function (req: NextApiRequest, res: NextApiResponse) {
     const token = parseBearerToken(req);
     if (!token) {
-      return { message: "no encontramos ningún token" };
+      res.status(401).send({ message: "no hay token" });
     }
     const decodedToken = decoded(token);
-    if (!decodedToken) {
-      return { message: "token incorrecto" };
-    } else {
+    if (decodedToken) {
       callback(req, res, decodedToken);
-      return { message: "token correcto :D" };
+    } else {
+      res.status(401).send({ message: "token incorrecto" });
     }
   };
 }
