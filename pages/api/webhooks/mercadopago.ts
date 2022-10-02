@@ -24,10 +24,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       await myOrder.pull();
       console.log(myOrder);
       
-      // // const user = new User(myOrder.userId);
-      // // await user.pull();
+        const user = new User(myOrder.data.userId);
+        await user.pull();
       
-      // await sendEmailSuccessSale(user.data.email);
+       await sendEmailSuccessSale(user.data.email);
       res.send(myOrder.data);
     }
   }
