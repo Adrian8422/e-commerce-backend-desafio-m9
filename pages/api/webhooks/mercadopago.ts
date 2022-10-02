@@ -9,11 +9,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { User } from "models/user";
 
-async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
-  const { id, topic } = req.query;
-  const userId = token.userId;
-  const user = new User(userId);
-  await user.pull();
+async function postHandler(req: NextApiRequest, res: NextApiResponse) {
+  const { topic } = req.query;
+  const {id} = req.query
+ 
   if (topic == "merchant_order") {
     const order = await getMerchantOrder(id);
     if (order.order_status == "paid") {
@@ -23,6 +22,9 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
       myOrder.data.status = "closed";
       await myOrder.push();
       console.log(myOrder);
+      const user = new User(myOrder.userId);
+      await user.pull();
+      
       await sendEmailSuccessSale(user.data.email);
       res.send(myOrder.data);
     }
