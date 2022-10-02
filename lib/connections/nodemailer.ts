@@ -1,18 +1,18 @@
-// create reusable transporter object using the default SMTP transport
 import nodemailer from "nodemailer";
 
-export const transporter = nodemailer.createTransport({
-  host: process.env.HOST_NODEMAILER,
-  port: 465,
-  secure: true, // true for 465, false for other ports
-  auth: {
-    user: process.env.USER_MAILER, // generated ethereal user
-    pass: process.env.API_KEY_MAILER, // generated ethereal password
-  },
-});
-
+export function transporter() {
+  return nodemailer.createTransport({
+    host: process.env.HOST_NODEMAILER,
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: "manbassman1996@gmail.com", // generated ethereal user
+      pass: process.env.API_KEY_MAILER, // generated ethereal password
+    },
+  });
+}
 export async function sendEmailToUser(emailUser, code) {
-  let info = transporter
+  await transporter()
     .sendMail({
       from: '"Forgot password 👻" <manbassman1996@gmail.com>', // sender address
       to: emailUser, // list of receivers
@@ -26,7 +26,7 @@ export async function sendEmailToUser(emailUser, code) {
     });
 }
 export async function sendEmailSuccessSale(emailUser) {
-  let info = transporter
+  await transporter()
     .sendMail({
       from: '"Forgot password 👻" <manbassman1996@gmail.com>', // sender address
       to: emailUser, // list of receivers
@@ -41,6 +41,7 @@ export async function sendEmailSuccessSale(emailUser) {
 }
 // send mail with defined transport object
 
-transporter.verify().then(() => {
+const tran = transporter();
+tran.verify().then(() => {
   console.log("Ready for send emails");
 });
