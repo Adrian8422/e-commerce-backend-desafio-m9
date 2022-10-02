@@ -9,7 +9,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { User } from "models/user";
 
-async function postHandler(req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { topic } = req.query;
   const {id} = req.query
  
@@ -30,7 +30,4 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
     }
   }
 }
-const handler = methods({
-  post: postHandler,
-});
-export default authMiddleware(handler);
+
