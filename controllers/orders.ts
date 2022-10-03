@@ -38,7 +38,8 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
         pending: "https://portfolio-6357a.web.app/",
       },
       notification_url:
-        "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
+        // "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
+        "https://webhook.site/15eead9d-9d4c-4d53-8dc9-86ad7dba0dd4"
     });
     return createPreferenceMp.init_point;
   }

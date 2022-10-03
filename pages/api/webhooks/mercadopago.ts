@@ -15,8 +15,5 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const {id} = req.query
   const response = await sendEmailSuccess(topic,id)
 res.send(response)
-
-      
-
 }
 
