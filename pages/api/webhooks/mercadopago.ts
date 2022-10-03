@@ -22,7 +22,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       myOrder.data.status = "closed";
       await myOrder.push();
       console.log(myOrder);
-    
+      console.log("este es el user ",myOrder.data.userId)
+    ///VER COMO TRAIGO AL EMAIL DE ESE USER  UTILIZANDO EL USERID QUE TENEMOS EN LA ORDER :DDDD RELAXXX QUE LO VAMOS A LOGRAR
       // // const user = new User(myOrder.data.userId);
       // // await user.pull();
       
