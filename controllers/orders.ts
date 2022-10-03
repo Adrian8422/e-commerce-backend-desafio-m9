@@ -1,7 +1,9 @@
 import { productIndex } from "lib/connections/algolia";
 import { getProductIdAlgolia } from "./products";
 import { Order } from "models/orders";
-import { createPreference } from "lib/connections/mercadopago";
+import { User } from "models/user";
+import { createPreference, getMerchantOrder } from "lib/connections/mercadopago";
+import { sendEmailSuccessSale } from "lib/connections/nodemailer";
 
 export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
   const product = await getProductIdAlgolia(productId);
@@ -56,4 +58,32 @@ export async function getOrderById(idOrder) {
     return { message: "no encontramos esa orden con ese id" };
   }
   return order;
+}
+
+export async function getOrderAndUpdateStatusFromMP(topic,id) {
+
+    if (topic == "merchant_order") {
+    const order = await getMerchantOrder(id);
+    if (order.order_status == "paid") {
+      const orderId = order.external_reference;
+      const myOrder = new Order(orderId);
+      await myOrder.pull();
+      myOrder.data.status = "closed";
+      await myOrder.push();
+      const currentOrder = new Order(orderId)
+      await currentOrder.pull()
+      return currentOrder
+   
+      }
+      }
+}
+export async function sendEmailSuccess(topic,id){
+  const order = await getOrderAndUpdateStatusFromMP(topic,id)
+  const user = new User(order.data.userId)
+  await user.pull()
+  
+  if(order.data.status == "closed"){
+    await sendEmailSuccessSale(user.data.email);
+  }
+  return {order,user}
 }

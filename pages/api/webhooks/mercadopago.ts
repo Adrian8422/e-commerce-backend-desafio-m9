@@ -8,36 +8,15 @@ import { Order } from "models/orders";
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { User } from "models/user";
+import { sendEmailSuccess } from "controllers/orders";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { topic } = req.query;
   const {id} = req.query
- 
-  if (topic == "merchant_order") {
-    const order = await getMerchantOrder(id);
-    if (order.order_status == "paid") {
-      const orderId = order.external_reference;
-      const myOrder = new Order(orderId);
-      await myOrder.pull();
-      myOrder.data.status = "closed";
-      await myOrder.push();
-      const getUser = new User(myOrder.data.userId)
-      await getUser.pull()
-      console.log(getUser)
-      console.log(myOrder);
-      console.log("este es el user ",myOrder.data.userId)
-    ///VER COMO TRAIGO AL EMAIL DE ESE USER  UTILIZANDO EL USERID QUE TENEMOS EN LA ORDER :DDDD RELAXXX QUE LO VAMOS A LOGRAR
-      // // const user = new User(myOrder.data.userId);
-      // // await user.pull();
-      const currentOrder = new Order(orderId)
-      await currentOrder.pull()
-      if(currentOrder.data.status == "closed"){
-        await sendEmailSuccessSale(getUser.data.email);
-      }
+  const response = await sendEmailSuccess(topic,id)
+res.send(response)
 
       
-      res.send(myOrder.data);
-    }
-  }
+
 }
 
