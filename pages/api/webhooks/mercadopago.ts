@@ -29,8 +29,13 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     ///VER COMO TRAIGO AL EMAIL DE ESE USER  UTILIZANDO EL USERID QUE TENEMOS EN LA ORDER :DDDD RELAXXX QUE LO VAMOS A LOGRAR
       // // const user = new User(myOrder.data.userId);
       // // await user.pull();
+      const currentOrder = new Order(orderId)
+      await currentOrder.pull()
+      if(currentOrder.data.status == "closed"){
+        await sendEmailSuccessSale(getUser.data.email);
+      }
+
       
-      await sendEmailSuccessSale("adrianvvillegas@outlook.es");
       res.send(myOrder.data);
     }
   }
