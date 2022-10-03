@@ -11,11 +11,12 @@ import { User } from "models/user";
 import { readFirstEndpoint, readSegundoEndpoint, sendEmailSuccess } from "controllers/orders";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const {data_id,type} = req.query as any
+  const {type} = req.query as any
+  const dataId = req.query["data.id"] as any
   const { topic ,id} = req.query as any
-  if(req.query == data_id && req.query == type){
+  if(req.query == dataId && req.query == type){
     const body = req.body
-    const firstEndpoint = await readFirstEndpoint(data_id,type,body) 
+    const firstEndpoint = await readFirstEndpoint(dataId,type,body) 
     res.send(firstEndpoint)
   }
   if(topic == "payment"){
