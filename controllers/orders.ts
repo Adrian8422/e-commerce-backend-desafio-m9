@@ -38,8 +38,8 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
         pending: "https://portfolio-6357a.web.app/",
       },
       notification_url:
-        // "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
-        "https://webhook.site/15eead9d-9d4c-4d53-8dc9-86ad7dba0dd4"
+        "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
+        // "https://webhook.site/15eead9d-9d4c-4d53-8dc9-86ad7dba0dd4"
     });
     return createPreferenceMp.init_point;
   }
@@ -59,6 +59,21 @@ export async function getOrderById(idOrder) {
     return { message: "no encontramos esa orden con ese id" };
   }
   return order;
+}
+
+export async function readFirstEndpoint(data_id,type,body){
+if(type == "payment"){
+
+  return body
+}
+  /// Hacer un if consultando si data_id es de tal valor al igual que con el type y si pasa eso esperado retornar el body 
+
+}
+export async function readSegundoEndpoint(topic,id,body){
+    /// Hacer un if consultando si data_id es de tal valor al igual que con el type y si pasa eso esperado retornar el body 
+    if(topic=="payment"){
+      return body
+    }
 }
 
 export async function getOrderAndUpdateStatusFromMP(topic,id) {
