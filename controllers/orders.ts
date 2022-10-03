@@ -63,7 +63,7 @@ export async function getOrderById(idOrder) {
 
 export async function readFirstEndpoint(data_id,type,body){
 if(type == "payment"){
-
+console.log(body)
   return body
 }
   /// Hacer un if consultando si data_id es de tal valor al igual que con el type y si pasa eso esperado retornar el body 
@@ -72,6 +72,7 @@ if(type == "payment"){
 export async function readSegundoEndpoint(topic,id,body){
     /// Hacer un if consultando si data_id es de tal valor al igual que con el type y si pasa eso esperado retornar el body 
     if(topic=="payment"){
+      console.log(body)
       return body
     }
 }
