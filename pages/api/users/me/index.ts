@@ -16,7 +16,7 @@ async function patchHandler(req: NextApiRequest, res: NextApiResponse, token) {
     address,
   }).catch((err)=>{
     res.status(401).send({
-      message:"error en modificar datos del usuario",
+      message:"error en modificar direccion del usuario",
       error:err
     })
   })

@@ -8,6 +8,9 @@ export async function getProductInALgolia(search, req) {
     offset: offset,
     length: limit,
   });
+  if(!res){
+    return {message:"no encontramos ese producto"}
+  }
   const hits = await res.hits;
 
   return {

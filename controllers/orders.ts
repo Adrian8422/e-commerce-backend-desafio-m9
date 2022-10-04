@@ -6,7 +6,7 @@ import { createPreference, getMerchantOrder } from "lib/connections/mercadopago"
 import { sendEmailSuccessSale } from "lib/connections/nodemailer";
 
 export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
-  const product = await getProductIdAlgolia(productId);
+  const product = await getProductIdAlgolia(productId)
   if (!product) {
     console.log("no encontramos el producto en la base de datos");
     return null;
@@ -41,7 +41,8 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
         "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
         // "https://webhook.site/15eead9d-9d4c-4d53-8dc9-86ad7dba0dd4"
     });
-    return createPreferenceMp.init_point;
+    return {url:createPreferenceMp.init_point,
+      ordenId :order.id};
   }
 }
 
