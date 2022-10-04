@@ -14,8 +14,14 @@ async function handlerAddress(
 ) {
   const { address } = req.body;
 
-  const user = await patchDataAddress(token.userId, address);
-  res.send(user.data);
+  const user = await patchDataAddress(token.userId, address).catch((err)=>{
+    res.status(401).send({
+      message:"error en modificar datos del usuario",
+      error:err
+
+    })
+  })
+  res.send(user);
 }
 const handler = methods({
   patch: handlerAddress,

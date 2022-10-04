@@ -14,9 +14,14 @@ async function patchHandler(req: NextApiRequest, res: NextApiResponse, token) {
     name,
     birthday,
     address,
-  });
+  }).catch((err)=>{
+    res.status(401).send({
+      message:"error en modificar datos del usuario",
+      error:err
+    })
+  })
 
-  res.send(user.data);
+  res.send(user);
 }
 const handler = methods({
   get: getHandler,

@@ -16,17 +16,21 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   if(req.query == data_id && req.query == type){
     const body = req.body
     const firstEndpoint = await readFirstEndpoint(data_id,type,body) 
-    res.send(firstEndpoint)
+    res.status(200).send(firstEndpoint)
   }
   if(topic == "payment"){
     const body = req.body
-    const segundoEndpoint = await readSegundoEndpoint(topic,id,body)
-    res.send(segundoEndpoint)
+    const segundoEndpoint = await readSegundoEndpoint(topic,id,body).catch((err)=>{
+      res.status(200).send({
+        message:err
+      })
+    })
+    res.status(200).send(segundoEndpoint)
   }
   if(topic == "merchant_order"){
 
     const response = await sendEmailSuccess(topic,id)
-  res.send(response)
+  res.status(200).send(response)
   }
 }
 

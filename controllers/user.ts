@@ -15,7 +15,7 @@ export async function patchUpdateDataUser(userId, data?) {
   user.data.birthday = birthday;
   user.data.address = address;
   await user.push();
-  return user;
+  return user.data;
 }
 
 export async function patchDataAddress(userId, newAddress) {
@@ -23,5 +23,5 @@ export async function patchDataAddress(userId, newAddress) {
   await user.pull();
   user.data.address = newAddress;
   await user.push();
-  return user;
+  return user.data;
 }
