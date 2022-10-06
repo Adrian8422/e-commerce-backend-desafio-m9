@@ -3,7 +3,8 @@ import { getProductIdAlgolia } from "./products";
 import { Order } from "models/orders";
 import { User } from "models/user";
 import { createPreference, getMerchantOrder } from "lib/connections/mercadopago";
-import { sendEmailSuccessSale } from "lib/connections/nodemailer";
+import { sendEmailOwnerSuccessVenta, sendEmailSuccessSale } from "lib/connections/nodemailer";
+import { Owner } from "models/owner";
 
 export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
   const product = await getProductIdAlgolia(productId)
@@ -12,6 +13,7 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
     return null;
   }
   const order = await Order.createOrder({
+    ownerId:product["ownerId"],
     productId: product["objectID"],
     userId: userId,
     status: "pending",
@@ -98,10 +100,14 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
 export async function sendEmailSuccess(topic,id){
   const order = await getOrderAndUpdateStatusFromMP(topic,id)
   const user = new User(order.data.userId)
+  const ownerProductList = new Owner(order.data.ownerId)
   await user.pull()
+  await ownerProductList.pull()
   
   if(order.data.status == "closed"){
     await sendEmailSuccessSale(user.data.email);
+    console.log("data del owner en controllers a punto de enviar email",ownerProductList.data.email)
+    await  sendEmailOwnerSuccessVenta(ownerProductList.data.email)
   }
   return {order,user}
 }

@@ -2,7 +2,11 @@ import { productIndex } from "lib/connections/algolia";
 import { airtableBase } from "lib/connections/airtable";
 import { NextApiRequest, NextApiResponse } from "next";
 
+
+
+
 export default function (req: NextApiRequest, res: NextApiResponse) {
+
   airtableBase("Table 1")
     .select({
       // Selecting the first 3 records in Grid view:
@@ -13,8 +17,10 @@ export default function (req: NextApiRequest, res: NextApiResponse) {
         // This function (`page`) will get called for each page of records.
 
         const obj = records.map(function (record) {
+          console.log("unoporuno",record)
           return {
             objectID: record.id,
+            ownerId:record["ownerId"],
             ...record.fields,
           };
         });
@@ -34,5 +40,6 @@ export default function (req: NextApiRequest, res: NextApiResponse) {
         }
       }
     );
+    console.log("a ver que datos hay",airtableBase("Table 1"))
   res.send("terminó");
 }
