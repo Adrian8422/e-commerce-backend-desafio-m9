@@ -112,8 +112,8 @@ export async function sendEmailSuccess(topic,id){
     console.log("data del owner en controllers a punto de enviar email",ownerProductList.data.email)
     await  sendEmailOwnerSuccessVenta(ownerProductList.data.email)
    const respuesta = await Billing.createBilling({
-    ownerId:ownerProductList.data.id,
-    userId:user.data.id,
+    ownerId:ownerProductList.id,
+    userId:user.id,
     address: user.data.address,
     message:"Pedido realizado con éxito, realizar envío al usuario comprador",
     userEmail:user.data.email,
