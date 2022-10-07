@@ -12,7 +12,6 @@ async function postHandler(req:NextApiRequest,res:NextApiResponse, token){
   ownerId,title,price,categories,shipment,description,stock
  })
 
-//  ver porque no me crea los productos en airtable, a esos productos cuando los creo tengo que pasarle el parametro ownerId para que lo guarde y dsp en algolia se lo agrego tambien 
   res.send(response)
 }
 const handler = methods({
