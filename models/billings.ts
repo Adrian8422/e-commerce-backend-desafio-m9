@@ -21,6 +21,6 @@ export class Billing {
     const snap = await collection.add(data)
     const newBilling = new Billing(snap.id)
     newBilling.data = data
-    return data
+    return newBilling
   }
 }
