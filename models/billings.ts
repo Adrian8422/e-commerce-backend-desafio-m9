@@ -2,8 +2,6 @@ import {firestore} from "lib/connections/firestore"
 const collection = firestore.collection("billings")
 export class Billing {
   id:string;
-  productId:string
-  userId:string
   data:any;
   ref:FirebaseFirestore.DocumentReference
   constructor(id){

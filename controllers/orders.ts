@@ -119,6 +119,7 @@ export async function sendEmailSuccess(topic,id){
     userEmail:user.data.email,
     name:user.data.name
      })
+     console.log("registro billing en db",respuesta)
      return {order,user,respuesta}
     }
 }
