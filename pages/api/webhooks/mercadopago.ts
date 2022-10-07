@@ -15,7 +15,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { topic ,id} = req.query as any
   if(req.query == data_id && req.query == type){
     const body = req.body
-    const firstEndpoint = await readFirstEndpoint(data_id,type,body) 
+    const firstEndpoint = await readFirstEndpoint(data_id,type,body) .catch((err)=>{
+      res.status(200).send({
+        message:err
+      })
+    })
     res.status(200).send(firstEndpoint)
   }
   if(topic == "payment"){
@@ -29,7 +33,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   }
   if(topic == "merchant_order"){
 
-    const response = await sendEmailSuccess(topic,id)
+    const response = await sendEmailSuccess(topic,id).catch((err)=>{
+      res.status(200).send({
+        message:err
+      })
+    })
   res.status(200).send(response)
   }
 }
