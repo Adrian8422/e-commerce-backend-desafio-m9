@@ -96,30 +96,38 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
       return currentOrder
    
       }
+      }else {
+        return null
       }
 }
 export async function sendEmailSuccess(topic,id){
   const order = await getOrderAndUpdateStatusFromMP(topic,id)
-  const user = new User(order.data.userId)
-  const ownerProductList = new Owner(order.data.ownerId)
-  await user.pull()
-  await ownerProductList.pull()
-  
-  if(order.data.status == "closed"){
-    await sendEmailSuccessSale(user.data.email);
+  if(order){
 
-    
-    console.log("data del owner en controllers a punto de enviar email",ownerProductList.data.email)
-    await  sendEmailOwnerSuccessVenta(ownerProductList.data.email)
-   const respuesta = await Billing.createBilling({
-    ownerId:ownerProductList.id,
-    userId:user.id,
-    address: user.data.address,
-    message:"Pedido realizado con éxito, realizar envío al usuario comprador",
-    userEmail:user.data.email,
-    name:user.data.name
-     })
-     console.log("registro billing en db",respuesta)
-     return {order,user,respuesta}
-    }
+    const user = new User(order.data.userId)
+    const ownerProductList = new Owner(order.data.ownerId)
+    await user.pull()
+    await ownerProductList.pull()
+
+    if(order.data.status == "closed"){
+      await sendEmailSuccessSale(user.data.email);
+  
+      
+      console.log("data del owner en controllers a punto de enviar email",ownerProductList.data.email)
+      await  sendEmailOwnerSuccessVenta(ownerProductList.data.email)
+     const respuesta = await Billing.createBilling({
+      ownerId:ownerProductList.id,
+      userId:user.id,
+      address: user.data.address,
+      message:"Pedido realizado con éxito, realizar envío al usuario comprador",
+      userEmail:user.data.email,
+      name:user.data.name
+       })
+       console.log("registro billing en db",respuesta)
+       return {order,user,respuesta}
+      }
+  }else {
+    return null
+  }
+  
 }
