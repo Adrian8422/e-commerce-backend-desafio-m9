@@ -14,8 +14,6 @@ import {  sendEmailSuccess } from "controllers/orders";
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   // const {data_id,type} = req.query as any
   const { topic ,id} = req.query as any
- let count = 0
-
   // if(req.query == data_id && req.query == type){
   //   const body = req.body
   //   const firstEndpoint = await readFirstEndpoint(data_id,type,body) .catch((err)=>{
@@ -34,16 +32,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   //   })
   //   res.status(200).send(segundoEndpoint)
   // }
-  
- while (count = 0) {
-   const response = await sendEmailSuccess(topic,id).catch((err)=>{
-     res.status(200).send({
-       message:err
-     })
-   })
-   count = 1
- res.status(200).send(response)
- }
-  
+  if(topic == "merchant_order"){
+
+    const response = await sendEmailSuccess(topic,id).catch((err)=>{
+      res.status(200).send({
+        message:err
+      })
+    })
+  res.status(200).send(response)
+  }
 }
 

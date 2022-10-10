@@ -83,7 +83,7 @@ export async function getOrderById(idOrder) {
 
 export async function getOrderAndUpdateStatusFromMP(topic,id) {
 
-    if (topic == "merchant_order") {
+   
     const order = await getMerchantOrder(id);
     if (order.order_status == "paid") {
       const orderId = order.external_reference;
@@ -96,9 +96,7 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
       return currentOrder
    
       }
-      }else {
-        return null
-      }
+    
 }
 export async function sendEmailSuccess(topic,id){
   const order = await getOrderAndUpdateStatusFromMP(topic,id)
