@@ -13,33 +13,37 @@ import {  sendEmailSuccess } from "controllers/orders";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   // const {data_id,type} = req.query as any
-  const { topic ,id} = req.query as any
-  // if(req.query == data_id && req.query == type){
-  //   const body = req.body
-  //   const firstEndpoint = await readFirstEndpoint(data_id,type,body) .catch((err)=>{
-  //     res.status(200).send({
-  //       message:err
-  //     })
-  //   })
-  //   res.status(200).send(firstEndpoint)
-  // }
-  // if(topic == "payment"){
-  //   const body = req.body
-  //   const segundoEndpoint = await readSegundoEndpoint(topic,id,body).catch((err)=>{
-  //     res.status(200).send({
-  //       message:err
-  //     })
-  //   })
-  //   res.status(200).send(segundoEndpoint)
-  // }
-  if(topic == "merchant_order"){
+  const { topic ,id} = req.query 
+  if(topic && id){
 
-    const response = await sendEmailSuccess(topic,id).catch((err)=>{
-      res.status(200).send({
+    
+    // if(req.query == data_id && req.query == type){
+      //   const body = req.body
+      //   const firstEndpoint = await readFirstEndpoint(data_id,type,body) .catch((err)=>{
+        //     res.status(200).send({
+          //       message:err
+          //     })
+          //   })
+          //   res.status(200).send(firstEndpoint)
+          // }
+          // if(topic == "payment"){
+            //   const body = req.body
+            //   const segundoEndpoint = await readSegundoEndpoint(topic,id,body).catch((err)=>{
+              //     res.status(200).send({
+                //       message:err
+                //     })
+                //   })
+                //   res.status(200).send(segundoEndpoint)
+                // }
+                if(topic == "merchant_order"){
+                  
+                  const response = await sendEmailSuccess(topic,id).catch((err)=>{
+                    res.status(200).send({
         message:err
       })
     })
   res.status(200).send(response)
   }
+}
 }
 
