@@ -83,6 +83,7 @@ export async function getOrderById(idOrder) {
 // }
 
 export async function getOrderAndUpdateStatusFromMP(topic,id) {
+  console.log("entro en getOrderAndUpdate cs")
 
    
     const order = await getMerchantOrder(id);
@@ -90,9 +91,9 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
       const orderId = order.external_reference;
       const myOrder = new Order(orderId);
       await myOrder.pull();
-      if((myOrder.data.status ="closed")){
-        return null
-      }
+      // if((myOrder.data.status ="closed")){
+      //   return null
+      // }
       myOrder.data.status = "closed";
       await myOrder.push();
       const currentOrder = new Order(orderId)
