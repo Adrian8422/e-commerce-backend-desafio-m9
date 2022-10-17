@@ -86,11 +86,11 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
 
    
     const order = await getMerchantOrder(id);
-    if (order.order_status == "paid") {
+    if ((order.order_status = "paid")) {
       const orderId = order.external_reference;
       const myOrder = new Order(orderId);
       await myOrder.pull();
-      if(myOrder.data.status =="closed"){
+      if((myOrder.data.status ="closed")){
         return null
       }
       myOrder.data.status = "closed";
@@ -104,18 +104,18 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
 }
 export async function sendEmailSuccess(topic,id){
   const order = await getOrderAndUpdateStatusFromMP(topic,id)
-  if(order.data.status =="closed"){
-    return null
-  }
+  // if(order.data.status ="closed"){
+  //   return null
+  // }
   
   if(order){
 
-    const user = new User(order.data.userId)
-    const ownerProductList = new Owner(order.data.ownerId)
+    const user = await new User(order.data.userId)
+    const ownerProductList =await new Owner(order.data.ownerId)
     await user.pull()
     await ownerProductList.pull()
 
-    if(order.data.status == "closed"){
+    if((order.data.status = "closed")){
       await sendEmailSuccessSale(user.data.email);
   
       
@@ -132,8 +132,6 @@ export async function sendEmailSuccess(topic,id){
        console.log("registro billing en db",respuesta)
        return {order,user,respuesta}
       }
-  }else {
-    return null
   }
   
 }

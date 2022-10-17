@@ -17,7 +17,7 @@ let querySchema  = yup.object().shape({
   id:yup.number().required()
 
 }).noUnknown(true).strict()
-async function getAndFilaniceOrder (req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
   // const {data_id,type} = req.query as any
   const { topic ,id} = req.query  
 //   if(!topic && !id){
@@ -59,5 +59,5 @@ async function getAndFilaniceOrder (req: NextApiRequest, res: NextApiResponse) {
 // }
 }
 
-export default schemaOrderId(querySchema,getAndFilaniceOrder)
+// export default schemaOrderId(querySchema,getAndFilaniceOrder)
 
