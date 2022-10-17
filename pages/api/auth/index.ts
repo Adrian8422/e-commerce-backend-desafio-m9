@@ -1,8 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { sendCode } from "controllers/auth";
+import * as yup from "yup"
+import { schemaAuth } from "lib/middlewares/schemaMiddleware";
+let bodySchema = yup.object().shape({
+  email: yup.string().required(),
+}).noUnknown(true).strict()
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+async function postHandler (req: NextApiRequest, res: NextApiResponse) {
   const { email } = req.body;
   const response = await sendCode(email).catch((err) => {
     res.status(401).send({
@@ -11,3 +16,5 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   });
   res.send(response);
 }
+
+export default schemaAuth(bodySchema,postHandler)

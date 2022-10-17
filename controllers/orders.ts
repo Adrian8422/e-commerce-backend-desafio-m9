@@ -6,8 +6,10 @@ import { createPreference, getMerchantOrder } from "lib/connections/mercadopago"
 import { sendEmailOwnerSuccessVenta, sendEmailSuccessSale } from "lib/connections/nodemailer";
 import { Owner } from "models/owner";
 import { Billing } from "models/billings";
-
-export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
+type CreateOrderResponse={
+  url:string
+}
+export async function createPreferenceAndOrderMp(productId, userId, dataBody) :Promise <CreateOrderResponse>{
   const product = await getProductIdAlgolia(productId)
   if (!product) {
     console.log("no encontramos el producto en la base de datos");
@@ -44,8 +46,7 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) {
         "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
         // "https://webhook.site/15eead9d-9d4c-4d53-8dc9-86ad7dba0dd4"
     });
-    return {url:createPreferenceMp.init_point,
-      ordenId :order.id};
+    return {url:createPreferenceMp.init_point};
   }
 }
 
@@ -89,6 +90,9 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
       const orderId = order.external_reference;
       const myOrder = new Order(orderId);
       await myOrder.pull();
+      if(myOrder.data.status =="closed"){
+        return null
+      }
       myOrder.data.status = "closed";
       await myOrder.push();
       const currentOrder = new Order(orderId)
@@ -100,6 +104,10 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
 }
 export async function sendEmailSuccess(topic,id){
   const order = await getOrderAndUpdateStatusFromMP(topic,id)
+  if(order.data.status =="closed"){
+    return null
+  }
+  
   if(order){
 
     const user = new User(order.data.userId)

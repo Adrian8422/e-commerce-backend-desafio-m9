@@ -22,4 +22,5 @@ export class Owner {
     newOwner.data = data
     return newOwner
   }
+
 }

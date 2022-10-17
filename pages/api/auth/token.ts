@@ -2,8 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import methods from "micro-method-router";
 import { authCodeReturnToken } from "controllers/auth";
+import * as yup from "yup"
+import { schemaAuth } from "lib/middlewares/schemaMiddleware";
+let bodySchema = yup.object().shape({
+  email: yup.string().required(),
+  code:yup.number().required()
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+}).noUnknown(true).strict()
+ async function postHanlder(req: NextApiRequest, res: NextApiResponse) {
   const { email, code } = req.body;
   if (email && code) {
     const response = await authCodeReturnToken(email, code).catch((error) => {
@@ -19,3 +25,4 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     });
   }
 }
+export default schemaAuth(bodySchema,postHanlder)

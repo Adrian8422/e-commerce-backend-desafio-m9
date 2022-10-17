@@ -10,10 +10,22 @@ import methods from "micro-method-router";
 import { User } from "models/user";
 // import { readFirstEndpoint, readSegundoEndpoint, sendEmailSuccess } from "controllers/orders";
 import {  sendEmailSuccess } from "controllers/orders";
+import * as yup from "yup"
+import { schemaOrderId } from "lib/middlewares/schemaMiddleware";
+let querySchema  = yup.object().shape({
+  topic:yup.string().required(),
+  id:yup.number().required()
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+}).noUnknown(true).strict()
+async function getAndFilaniceOrder (req: NextApiRequest, res: NextApiResponse) {
   // const {data_id,type} = req.query as any
-  const { topic ,id} = req.query 
+  const { topic ,id} = req.query  
+  if(!topic && !id){
+res.status(200).send("no hay topic ni id")
+  }
+  if(topic !=="merchant_order"){
+    res.status(200).send("topic incorrecto")
+  }
   if(topic && id){
 
     
@@ -46,4 +58,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   }
 }
 }
+
+export default schemaOrderId(querySchema,getAndFilaniceOrder)
 

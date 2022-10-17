@@ -2,7 +2,7 @@ import { airtableBase } from "lib/connections/airtable";
 import { productIndex } from "lib/connections/algolia";
 import { getOffsetAndLimitFromReq } from "lib/functions/requests";
 
-export async function getProductInALgolia(search, req) {
+export async function getProductQueryInALgolia(search, req) {
   const { offset, limit } = getOffsetAndLimitFromReq(req);
 
   const res = await productIndex.search(search, {
@@ -38,7 +38,7 @@ export async function getProductIdAlgolia(productId) {
 
 export async function createProductsInAirtable (data){
   const {ownerId,title,price,categories,shipment,description,stock} = data
-   await airtableBase("Table 1").create([
+  const res =  await airtableBase("Table 1").create([
     {
       "fields": {
         "ownerId":ownerId,
@@ -50,21 +50,58 @@ export async function createProductsInAirtable (data){
         "stock": stock
       }
     },
-  ], function (err,records){
-    if(err){
-      console.log("error",err)
-      return null 
-    }
-    const obj = records.map(function (record) {
-      console.log(record.fields)
-      return {
-        objectID: record.id,
+  ],
+  ).catch((err)=>{console.log(err) })
+  const dataobj = await res[0].fields
+  return dataobj
 
-        // ownerId:"tal id pedirlo al owner",
-        ...record.fields,
-      };
-    });
-  }
-  
-  )
 }
+
+export async  function getAllProductsOwner(offset,limit){
+const res = await productIndex.search("",{
+  offset:offset,
+  length:limit
+})
+
+const hits = await res.hits
+if(!hits){
+  return {message:"no encontramos ningun producto"}
+}
+return {
+  results: hits,
+  pagination: {
+    offset,
+    limit,
+    total: hits.length,
+  }
+} 
+}
+export async function updateByIdProduct(idProduct,ownerId,data){
+  const {title,price,categories,shipment,description,stock} = data
+  const res =await airtableBase('Table 1').update(idProduct, {
+    "price": price,
+    "categories": categories,
+    "shipment": shipment,
+    "ownerId": ownerId,
+    "description": description,
+    "stock": stock,
+    "title": title
+  },
+  ).catch((err)=>{console.log(err) })
+  const dataobj = await res["fields"]
+  return dataobj
+}
+
+export async function deleteByIdProduct(idProduct){
+
+ const res= await airtableBase('Table 1').destroy( idProduct).catch((err)=>{console.error(err) 
+}
+)
+if(res){
+  return {message:"producto borrado con éxito"}
+}else {
+    return { message:"el producto que queres borrar no existe"}
+  }
+}
+
+
