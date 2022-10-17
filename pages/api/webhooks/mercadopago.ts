@@ -19,7 +19,7 @@ let querySchema  = yup.object().shape({
 }).noUnknown(true).strict()
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   // const {data_id,type} = req.query as any
-  const { topic ,id} = req.query  
+  const {topic,id} = req.query  
 //   if(!topic && !id){
 // res.status(200).send("no hay topic ni id")
 //   }
@@ -48,6 +48,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
                 //   res.status(200).send(segundoEndpoint)
                 // }
                 if(topic == "merchant_order"){
+                  console.log("entro aca porque tenia merchandorder endpoint")
                   
                   const response = await sendEmailSuccess(topic,id).catch((err)=>{
                     res.status(200).send({

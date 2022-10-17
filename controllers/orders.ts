@@ -97,12 +97,14 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
       await myOrder.push();
       const currentOrder = new Order(orderId)
       await currentOrder.pull()
+      console.log("entro y vemos la orden nueva",currentOrder)
       return currentOrder
    
       }
     
 }
 export async function sendEmailSuccess(topic,id){
+  console.log("entro en la funcion controller senemailSucces")
   const order = await getOrderAndUpdateStatusFromMP(topic,id)
   // if(order.data.status ="closed"){
   //   return null
@@ -115,7 +117,8 @@ export async function sendEmailSuccess(topic,id){
     await user.pull()
     await ownerProductList.pull()
 
-    if((order.data.status = "closed")){
+    if((order.data.status = "closed")){ 
+      console.log("entro en la funcion para enviar los email a los users correspondientes")
       await sendEmailSuccessSale(user.data.email);
   
       
