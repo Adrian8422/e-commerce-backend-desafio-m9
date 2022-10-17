@@ -82,58 +82,56 @@ export async function getOrderById(idOrder) {
 //     }
 // }
 
-export async function getOrderAndUpdateStatusFromMP(topic,id) {
-  console.log("entro en getOrderAndUpdate cs")
+// export async function getOrderAndUpdateStatusFromMP(topic,id) {
+//   console.log("entro en getOrderAndUpdate cs")
 
    
-    const order = await getMerchantOrder(id);
-    if ((order.order_status = "paid")) {
-      const orderId = order.external_reference;
-      const myOrder = new Order(orderId);
-      await myOrder.pull();
+//     const order = await getMerchantOrder(id);
+//     if ((order.order_status = "paid")) {
+//       const orderId = order.external_reference;
+//       const myOrder = new Order(orderId);
+//       await myOrder.pull();
    
-      myOrder.data.status = "closed";
-      await myOrder.push();
-      const currentOrder = new Order(orderId)
-      await currentOrder.pull()
-      console.log("entro y vemos la orden nueva",currentOrder)
-      return currentOrder
+//       myOrder.data.status = "closed";
+//       await myOrder.push();
+//       const currentOrder = new Order(orderId)
+//       await currentOrder.pull()
+//       console.log("entro y vemos la orden nueva",currentOrder)
+//       return currentOrder
    
-      }
+//       }
     
-}
-export async function sendEmailSuccess(topic,id){
-  console.log("entro en la funcion controller senemailSucces")
-  const order = await getOrderAndUpdateStatusFromMP(topic,id)
-  // if(order.data.status ="closed"){
-  //   return null
-  // }
+// }
+// export async function sendEmailSuccess(topic,id){
+//   console.log("entro en la funcion controller senemailSucces")
+//   const order = await getOrderAndUpdateStatusFromMP(topic,id)
+
   
-  if(order){
+//   if(order){
 
-    const user = await new User(order.data.userId)
-    const ownerProductList =await new Owner(order.data.ownerId)
-    await user.pull()
-    await ownerProductList.pull()
+//     const user = await new User(order.data.userId)
+//     const ownerProductList =await new Owner(order.data.ownerId)
+//     await user.pull()
+//     await ownerProductList.pull()
 
-    if((order.data.status = "closed")){ 
-      console.log("entro en la funcion para enviar los email a los users correspondientes")
-      await sendEmailSuccessSale(user.data.email);
+//     if((order.data.status = "closed")){ 
+//       console.log("entro en la funcion para enviar los email a los users correspondientes")
+//       await sendEmailSuccessSale(user.data.email);
   
       
-      console.log("data del owner en controllers a punto de enviar email",ownerProductList.data.email)
-      await  sendEmailOwnerSuccessVenta(ownerProductList.data.email)
-     const respuesta = await Billing.createBilling({
-      ownerId:ownerProductList.id,
-      userId:user.id,
-      address: user.data.address,
-      message:"Pedido realizado con éxito, realizar envío al usuario comprador",
-      userEmail:user.data.email,
-      name:user.data.name
-       })
-       console.log("registro billing en db",respuesta)
-       return {order,user,respuesta}
-      }
-  }
+//       console.log("data del owner en controllers a punto de enviar email",ownerProductList.data.email)
+//       await  sendEmailOwnerSuccessVenta(ownerProductList.data.email)
+//      const respuesta = await Billing.createBilling({
+//       ownerId:ownerProductList.id,
+//       userId:user.id,
+//       address: user.data.address,
+//       message:"Pedido realizado con éxito, realizar envío al usuario comprador",
+//       userEmail:user.data.email,
+//       name:user.data.name
+//        })
+//        console.log("registro billing en db",respuesta)
+//        return {order,user,respuesta}
+//       }
+//   }
   
-}
+// }

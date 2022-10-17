@@ -1,5 +1,6 @@
 import { getMerchantOrder } from "lib/connections/mercadopago";
 import {
+  sendEmailOwnerSuccessVenta,
   sendEmailSuccessSale,
   sendEmailToUser,
 } from "lib/connections/nodemailer";
@@ -9,23 +10,53 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { User } from "models/user";
 // import { readFirstEndpoint, readSegundoEndpoint, sendEmailSuccess } from "controllers/orders";
-import {  sendEmailSuccess } from "controllers/orders";
+// import {  sendEmailSuccess } from "controllers/orders";
 import * as yup from "yup"
 import { schemaOrderId } from "lib/middlewares/schemaMiddleware";
+import { Owner } from "models/owner";
 let querySchema  = yup.object().shape({
   topic:yup.string().required(),
   id:yup.number().required()
 
 }).noUnknown(true).strict()
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  // const {data_id,type} = req.query as any
-  const {topic,id} = req.query  
-if(!topic && !id){
-res.status(200).send("no hay topic ni id")
-}
-if(topic !=="merchant_order"){
-  res.status(200).send("topic incorrecto")
-}
+  const { id, topic } = req.query;
+  console.log({ id: id, topic: topic });
+  if (topic == "merchant_order") {
+    const order = await getMerchantOrder(id);
+    //    ORDER tambien nos devuelve el external_reference == orderId en la api
+    // buscar en la collection ese orderId que por ende tendria el userId el cual tambien ir a su collection y conseguir su email
+    if ((order.order_status = "paid")) {
+      const orderId = order.external_reference;
+      const myOrderDB = await new Order(orderId);
+      await myOrderDB.pull();
+      myOrderDB.data.status = "closed";
+      await myOrderDB.push();
+      await myOrderDB.pull();
+      const user = new User(myOrderDB.data.userId)
+      await user.pull()
+      const owner = new Owner(myOrderDB.data.ownerId)
+      await owner.pull()
+      await sendEmailSuccessSale(user.data.email);
+  
+      
+      console.log("data del owner en controllers a punto de enviar email",owner.data.email)
+      await  sendEmailOwnerSuccessVenta(owner.data.email)
+      // sendEmail al user("Tu pago fue confirmado")
+      // sendEmailInterno("Alguien compró algo")
+      res.send(myOrderDB);
+    }
+  }
+  // const {data_id,type} = req.query as anyç
+
+  /// traer my orden aca y consultar, si esta closed -- responder con status 200 y que diga que ya esta realizado el proceso 
+//   const {topic,id} = req.query  
+// if(!topic && !id){
+// res.status(200).send("no hay topic ni id")
+// }
+// if(topic !=="merchant_order"){
+//   res.status(200).send("topic incorrecto")
+// }
   // if(topic && id){
 
     
@@ -47,16 +78,16 @@ if(topic !=="merchant_order"){
                 //   })
                 //   res.status(200).send(segundoEndpoint)
                 // }
-                if(topic == "merchant_order"){
-                  console.log("entro aca porque tenia merchandorder endpoint")
+  //               if(topic == "merchant_order"){
+  //                 console.log("entro aca porque tenia merchandorder endpoint")
                   
-                  const response = await sendEmailSuccess(topic,id).catch((err)=>{
-                    res.status(200).send({
-        message:err
-      })
-    })
-  res.status(200).send(response)
-  }
+  //                 const response = await sendEmailSuccess(topic,id).catch((err)=>{
+  //                   res.status(200).send({
+  //       message:err
+  //     })
+  //   })
+  // res.status(200).send(response)
+  // }
 // }
 }
 
