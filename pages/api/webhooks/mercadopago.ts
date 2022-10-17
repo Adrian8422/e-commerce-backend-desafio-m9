@@ -22,6 +22,9 @@ let querySchema  = yup.object().shape({
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
   console.log({ id: id, topic: topic });
+  if(!id && !topic){
+    res.status(200).send("entro aca donde no hay id ni topic")
+  }
   if (topic == "merchant_order") {
     const order = await getMerchantOrder(id);
     //    ORDER tambien nos devuelve el external_reference == orderId en la api
@@ -32,7 +35,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       await myOrderDB.pull();
       if(myOrderDB.data.status="closed"){
 res.status(200).send("ya esta realizado ")
+
       }
+    
       myOrderDB.data.status = "closed";
       await myOrderDB.push();
       await myOrderDB.pull();
@@ -41,6 +46,7 @@ res.status(200).send("ya esta realizado ")
       const owner = new Owner(myOrderDB.data.ownerId)
       await owner.pull()
       await sendEmailSuccessSale(user.data.email);
+      console.log(myOrderDB)
   
       
       console.log("data del owner en controllers a punto de enviar email",owner.data.email)
