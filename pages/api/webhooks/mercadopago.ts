@@ -26,10 +26,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   if(!id && !topic){
     res.status(200).send("entro aca donde no hay id ni topic")
   }
-  if(id && topic =="payment"){
-    res.status(200).send("topic payment")
-  }
-  if (topic == "merchant_order") {
+  // if(id && topic =="payment"){
+  //   res.status(200).send("topic payment")
+  // }
+  if (id && topic === "merchant_order") {
+    console.log("entro al endpoint seccion merchant order")
     const order = await getMerchantOrder(id);
     //    ORDER tambien nos devuelve el external_reference == orderId en la api
     // buscar en la collection ese orderId que por ende tendria el userId el cual tambien ir a su collection y conseguir su email
