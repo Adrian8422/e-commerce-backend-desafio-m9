@@ -91,9 +91,7 @@ export async function getOrderAndUpdateStatusFromMP(topic,id) {
       const orderId = order.external_reference;
       const myOrder = new Order(orderId);
       await myOrder.pull();
-      // if((myOrder.data.status ="closed")){
-      //   return null
-      // }
+   
       myOrder.data.status = "closed";
       await myOrder.push();
       const currentOrder = new Order(orderId)

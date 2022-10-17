@@ -20,12 +20,12 @@ let querySchema  = yup.object().shape({
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   // const {data_id,type} = req.query as any
   const {topic,id} = req.query  
-//   if(!topic && !id){
-// res.status(200).send("no hay topic ni id")
-//   }
-//   if(topic !=="merchant_order"){
-//     res.status(200).send("topic incorrecto")
-//   }
+if(!topic && !id){
+res.status(200).send("no hay topic ni id")
+}
+if(topic !=="merchant_order"){
+  res.status(200).send("topic incorrecto")
+}
   // if(topic && id){
 
     
