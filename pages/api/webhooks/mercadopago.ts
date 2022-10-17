@@ -59,7 +59,7 @@ res.status(200).send("ya esta realizado ")
       res.status(200).send(myOrderDB);
     }
   }
-  // const {data_id,type} = req.query as anyç
+  // const {data_id,type} = req.query as any
 
   /// traer my orden aca y consultar, si esta closed -- responder con status 200 y que diga que ya esta realizado el proceso 
 //   const {topic,id} = req.query  
