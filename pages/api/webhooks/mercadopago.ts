@@ -25,6 +25,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   if(!id && !topic){
     res.status(200).send("entro aca donde no hay id ni topic")
   }
+  if(id && topic =="payment"){
+    res.status(200).send("topic payment")
+  }
   if (topic == "merchant_order") {
     const order = await getMerchantOrder(id);
     //    ORDER tambien nos devuelve el external_reference == orderId en la api
