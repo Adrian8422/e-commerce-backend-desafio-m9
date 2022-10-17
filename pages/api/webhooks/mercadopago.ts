@@ -20,13 +20,13 @@ let querySchema  = yup.object().shape({
 async function getAndFilaniceOrder (req: NextApiRequest, res: NextApiResponse) {
   // const {data_id,type} = req.query as any
   const { topic ,id} = req.query  
-  if(!topic && !id){
-res.status(200).send("no hay topic ni id")
-  }
-  if(topic !=="merchant_order"){
-    res.status(200).send("topic incorrecto")
-  }
-  if(topic && id){
+//   if(!topic && !id){
+// res.status(200).send("no hay topic ni id")
+//   }
+//   if(topic !=="merchant_order"){
+//     res.status(200).send("topic incorrecto")
+//   }
+  // if(topic && id){
 
     
     // if(req.query == data_id && req.query == type){
@@ -56,7 +56,7 @@ res.status(200).send("no hay topic ni id")
     })
   res.status(200).send(response)
   }
-}
+// }
 }
 
 export default schemaOrderId(querySchema,getAndFilaniceOrder)
