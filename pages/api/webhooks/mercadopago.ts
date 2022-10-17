@@ -14,6 +14,7 @@ import { User } from "models/user";
 import * as yup from "yup"
 import { schemaOrderId } from "lib/middlewares/schemaMiddleware";
 import { Owner } from "models/owner";
+import { Billing } from "models/billings";
 let querySchema  = yup.object().shape({
   topic:yup.string().required(),
   id:yup.number().required()
@@ -37,7 +38,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       const myOrderDB = await new Order(orderId);
       await myOrderDB.pull();
       if(myOrderDB.data.status="closed"){
-res.status(200).send("ya esta realizado ")
+     res.status(200).send("ya esta realizado ")
 
       }
     
@@ -50,6 +51,14 @@ res.status(200).send("ya esta realizado ")
       await owner.pull()
       await sendEmailSuccessSale(user.data.email);
       console.log(myOrderDB)
+     await Billing.createBilling({
+             ownerId:owner.id,
+             userId:user.id,
+             address: user.data.address,
+             message:"Pedido realizado con éxito, realizar envío al usuario comprador",
+             userEmail:user.data.email,
+             name:user.data.name
+              })
   
       
       console.log("data del owner en controllers a punto de enviar email",owner.data.email)
