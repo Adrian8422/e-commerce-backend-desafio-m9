@@ -30,6 +30,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       const orderId = order.external_reference;
       const myOrderDB = await new Order(orderId);
       await myOrderDB.pull();
+      if(myOrderDB.data.status="closed"){
+res.status(200).send("ya esta realizado ")
+      }
       myOrderDB.data.status = "closed";
       await myOrderDB.push();
       await myOrderDB.pull();
@@ -44,7 +47,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       await  sendEmailOwnerSuccessVenta(owner.data.email)
       // sendEmail al user("Tu pago fue confirmado")
       // sendEmailInterno("Alguien compró algo")
-      res.send(myOrderDB);
+      res.status(200).send(myOrderDB);
     }
   }
   // const {data_id,type} = req.query as anyç
