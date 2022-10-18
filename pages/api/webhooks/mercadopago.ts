@@ -117,7 +117,8 @@ let querySchema  = yup.object().shape({
 // }
 }
 methods ({
-  post:postHandler
+  post:postHandler,
+  get:postHandler
 })
 
 
