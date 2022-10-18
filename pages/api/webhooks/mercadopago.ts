@@ -20,7 +20,8 @@ let querySchema  = yup.object().shape({
   id:yup.number().required()
 
 }).noUnknown(true).strict()
- async  function postHandler (req: NextApiRequest, res: NextApiResponse) {
+module.exports = methods( { 
+  async post(req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
   console.log({ id: id, topic: topic });
   if(!id && !topic){
@@ -73,51 +74,8 @@ let querySchema  = yup.object().shape({
       res.status(200).send(myOrderDB);
     }
   }
-  // const {data_id,type} = req.query as any
+  
+}})
 
-  /// traer my orden aca y consultar, si esta closed -- responder con status 200 y que diga que ya esta realizado el proceso 
-//   const {topic,id} = req.query  
-// if(!topic && !id){
-// res.status(200).send("no hay topic ni id")
-// }
-// if(topic !=="merchant_order"){
-//   res.status(200).send("topic incorrecto")
-// }
-  // if(topic && id){
-
-    
-    // if(req.query == data_id && req.query == type){
-      //   const body = req.body
-      //   const firstEndpoint = await readFirstEndpoint(data_id,type,body) .catch((err)=>{
-        //     res.status(200).send({
-          //       message:err
-          //     })
-          //   })
-          //   res.status(200).send(firstEndpoint)
-          // }
-          // if(topic == "payment"){
-            //   const body = req.body
-            //   const segundoEndpoint = await readSegundoEndpoint(topic,id,body).catch((err)=>{
-              //     res.status(200).send({
-                //       message:err
-                //     })
-                //   })
-                //   res.status(200).send(segundoEndpoint)
-                // }
-  //               if(topic == "merchant_order"){
-  //                 console.log("entro aca porque tenia merchandorder endpoint")
-                  
-  //                 const response = await sendEmailSuccess(topic,id).catch((err)=>{
-  //                   res.status(200).send({
-  //       message:err
-  //     })
-  //   })
-  // res.status(200).send(response)
-  // }
-// }
-}
-const handler = methods({
-  post:postHandler
-})
- export default schemaOrderId(querySchema,handler)
+// export default schemaOrderId(querySchema,getAndFilaniceOrder)
 
