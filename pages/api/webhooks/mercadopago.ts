@@ -15,67 +15,44 @@ import * as yup from "yup"
 import { schemaOrderId } from "lib/middlewares/schemaMiddleware";
 import { Owner } from "models/owner";
 import { Billing } from "models/billings";
+import { middlewareMercadoPago } from "lib/middlewares/mercadopagoMiddle";
 let querySchema  = yup.object().shape({
   topic:yup.string().required(),
   id:yup.number().required()
 
 }).noUnknown(true).strict()
-module.exports = methods( { 
-  async post(req: NextApiRequest, res: NextApiResponse) {
+
+  async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
-  console.log({ id: id, topic: topic });
-  if(!id && !topic){
-    res.status(200).send("entro aca donde no hay id ni topic")
-  }
-
-  /// APARENTEMENTE AHORA FUNCIONO, SOLO ME LO CREO UNA VEZ AL BILLINGS-- HACER EL OTRO IF PARA QUE ME DEVUELVA UN 200 CON ESTO PROXIMO EN EL ENDPOINT
-  // if(id && topic =="payment"){
-  //   res.status(200).send("topic payment")
-  // }
-
-  /// Y MOVER LO QUE MAS PUEDA AL CONTROLLERS :DDDDDD
-  if (id && topic === "merchant_order") {
-    console.log("entro al endpoint seccion merchant order")
-    const order = await getMerchantOrder(id);
-    //    ORDER tambien nos devuelve el external_reference == orderId en la api
-    // buscar en la collection ese orderId que por ende tendria el userId el cual tambien ir a su collection y conseguir su email
-    if ((order.order_status = "paid")) {
-      const orderId = order.external_reference;
-      const myOrderDB = await new Order(orderId);
-      await myOrderDB.pull();
-      if(myOrderDB.data.status="closed"){
-     res.status(200).send("ya esta realizado ")
-
-      }
-    
-      myOrderDB.data.status = "closed";
-      await myOrderDB.push();
-      await myOrderDB.pull();
-      const user = new User(myOrderDB.data.userId)
-      await user.pull()
-      const owner = new Owner(myOrderDB.data.ownerId)
-      await owner.pull()
-      await sendEmailSuccessSale(user.data.email);
-      console.log(myOrderDB)
-     await Billing.createBilling({
-             ownerId:owner.id,
-             userId:user.id,
-             address: user.data.address,
-             message:"Pedido realizado con éxito, realizar envío al usuario comprador",
-             userEmail:user.data.email,
-             name:user.data.name
-              })
-  
-      
-      console.log("data del owner en controllers a punto de enviar email",owner.data.email)
-      await  sendEmailOwnerSuccessVenta(owner.data.email)
-      // sendEmail al user("Tu pago fue confirmado")
-      // sendEmailInterno("Alguien compró algo")
-      res.status(200).send(myOrderDB);
-    }
-  }
-  
-}})
+  const order = await getMerchantOrder(id);
+  const orderId = order.external_reference;
+  const myOrderDB = new Order(orderId);
+  await myOrderDB.pull();
+  myOrderDB.data.status = "closed"
+  await myOrderDB.push()
+  const user =  new User(myOrderDB.data.userId)
+  const owner = new Owner(myOrderDB.data.ownerId)
+  await user.pull()
+  await owner.pull()
+  await sendEmailSuccessSale(user.data.email);
+  await  sendEmailOwnerSuccessVenta(owner.data.email)
+  await Billing.createBilling({
+    ownerId:owner.id,
+    userId:user.id,
+    address: user.data.address,
+    message:"Pedido realizado con éxito, realizar envío al usuario comprador",
+    userEmail:user.data.email,
+    name:user.data.name
+     })
+     res.status(200).send({message:"todo salio ok tenes un producto para enviar"})
+  //pasamos el req al middleware
+ 
+}
+const handler = methods({
+  post:postHandler
+})
+export default middlewareMercadoPago(handler)
+/// CREAR MIDDLEWARE QUE EN BASE A LA ORDEN SI ESTA PENDIENTE QUE LA ACTUALICE Y CREE UN BILLING Y MANDE LOS EMAILS Y SI LA ORDEN YA ESTA CERRADA QUE RETORNE NULL Y QUITAMOS LAS RESPONSABILIDADES DEL ENDPOINT :DD DSP VER EL VIDEO DALE QUE SE PUEDE ADRIIII :DDDD
 
 // export default schemaOrderId(querySchema,getAndFilaniceOrder)
 
