@@ -20,7 +20,7 @@ let querySchema  = yup.object().shape({
   id:yup.number().required()
 
 }).noUnknown(true).strict()
- async  function postHandlerMP (req: NextApiRequest, res: NextApiResponse) {
+ async  function postHandler (req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
   console.log({ id: id, topic: topic });
   if(!id && !topic){
@@ -116,9 +116,8 @@ let querySchema  = yup.object().shape({
   // }
 // }
 }
-const handler = methods({
-  post:postHandlerMP
+methods ({
+  post:postHandler
 })
 
- export default schemaOrderId(querySchema,handler)
 
