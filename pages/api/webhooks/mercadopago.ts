@@ -116,9 +116,6 @@ let querySchema  = yup.object().shape({
   // }
 // }
 }
-methods ({
-  post:postHandler,
-  get:postHandler
-})
 
+ export default schemaOrderId(querySchema,postHandler)
 
