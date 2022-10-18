@@ -32,11 +32,11 @@ export function schemaAuth(bodySchema,callback){
 export function schemaOrderId(querySchema,callback){
 
   /// este no hace nada la verdad, porque se lo pasamos como parametro al id de la orden, ver como puedo verificar ahi en el endpoint :D
-  return async function (req:NextApiRequest,res:NextApiResponse){
+  return async function (req:NextApiRequest,res:NextApiResponse,token){
     try{
       const validationQuery = await querySchema.validate(req.query)
       if(validationQuery ){
-        callback(req,res)
+        callback(req,res,token)
       }
       
     }catch(err){
