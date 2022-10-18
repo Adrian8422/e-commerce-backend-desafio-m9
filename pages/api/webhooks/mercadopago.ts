@@ -20,15 +20,19 @@ let querySchema  = yup.object().shape({
   id:yup.number().required()
 
 }).noUnknown(true).strict()
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+ async  function postHandlerMP (req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
   console.log({ id: id, topic: topic });
   if(!id && !topic){
     res.status(200).send("entro aca donde no hay id ni topic")
   }
+
+  /// APARENTEMENTE AHORA FUNCIONO, SOLO ME LO CREO UNA VEZ AL BILLINGS-- HACER EL OTRO IF PARA QUE ME DEVUELVA UN 200 CON ESTO PROXIMO EN EL ENDPOINT
   // if(id && topic =="payment"){
   //   res.status(200).send("topic payment")
   // }
+
+  /// Y MOVER LO QUE MAS PUEDA AL CONTROLLERS :DDDDDD
   if (id && topic === "merchant_order") {
     console.log("entro al endpoint seccion merchant order")
     const order = await getMerchantOrder(id);
@@ -112,6 +116,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   // }
 // }
 }
+const handler = methods({
+  post:postHandlerMP
+})
 
-// export default schemaOrderId(querySchema,getAndFilaniceOrder)
+ export default schemaOrderId(querySchema,handler)
 
