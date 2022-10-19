@@ -16,6 +16,7 @@ import { schemaOrderId } from "lib/middlewares/schemaMiddleware";
 import { Owner } from "models/owner";
 import { Billing } from "models/billings";
 import { middlewareMercadoPago } from "lib/middlewares/mercadopagoMiddle";
+import { checkOrderAndCreateBilling } from "controllers/orders";
 let querySchema  = yup.object().shape({
   topic:yup.string().required(),
   id:yup.number().required()
@@ -23,28 +24,10 @@ let querySchema  = yup.object().shape({
 }).noUnknown(true).strict()
 
   async function postHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { id, topic } = req.query;
-  const order = await getMerchantOrder(id);
-  const orderId = order.external_reference;
-  const myOrderDB = new Order(orderId);
-  await myOrderDB.pull();
-  myOrderDB.data.status = "closed"
-  await myOrderDB.push()
-  const user =  new User(myOrderDB.data.userId)
-  const owner = new Owner(myOrderDB.data.ownerId)
-  await user.pull()
-  await owner.pull()
-  await sendEmailSuccessSale(user.data.email);
-  await  sendEmailOwnerSuccessVenta(owner.data.email)
-  await Billing.createBilling({
-    ownerId:owner.id,
-    userId:user.id,
-    address: user.data.address,
-    message:"Pedido realizado con éxito, realizar envío al usuario comprador",
-    userEmail:user.data.email,
-    name:user.data.name
-     })
-     res.status(200).send({message:"todo salio ok tenes un producto para enviar"})
+  const { id } = req.query;
+ await checkOrderAndCreateBilling(id)
+ 
+   res.status(200).send({message:"todo salio ok tenes un producto para enviar"})
   //pasamos el req al middleware
  
 }

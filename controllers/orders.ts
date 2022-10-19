@@ -66,6 +66,33 @@ export async function getOrderById(idOrder) {
   return order;
 }
 
+export async function checkOrderAndCreateBilling(id){
+  const order = await getMerchantOrder(id);
+  const orderId = order.external_reference;
+  const myOrderDB = new Order(orderId);
+  await myOrderDB.pull();
+  myOrderDB.data.status = "closed"
+  await myOrderDB.push()
+  const user =  new User(myOrderDB.data.userId)
+  const owner = new Owner(myOrderDB.data.ownerId)
+  await user.pull()
+  await owner.pull()
+  await sendEmailSuccessSale(user.data.email);
+  await  sendEmailOwnerSuccessVenta(owner.data.email)
+const newBilling =  await Billing.createBilling({
+    ownerId:owner.id,
+    userId:user.id,
+    address: user.data.address,
+    message:"Pedido realizado con éxito, realizar envío al usuario comprador",
+    userEmail:user.data.email,
+    name:user.data.name
+     })
+
+     return newBilling
+
+
+} 
+
 // export async function readFirstEndpoint(data_id,type,body){
 // if(type == "payment"){
 // console.log(body)
