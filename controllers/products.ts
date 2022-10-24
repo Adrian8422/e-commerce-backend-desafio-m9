@@ -35,6 +35,13 @@ export async function getProductIdAlgolia(productId) {
     };
   }
 }
+export async function getArrayProductsIdAlgolia(productsIds){
+  console.log(productsIds)
+  const res = await productIndex.getObjects(productsIds)
+  console.log("a ver",res)
+  return res
+
+}
 
 export async function createProductsInAirtable (data){
   const {ownerId,title,price,categories,shipment,description,stock} = data
@@ -87,9 +94,10 @@ export async function updateByIdProduct(idProduct,ownerId,data){
     "stock": stock,
     "title": title
   },
-  ).catch((err)=>{console.log(err) })
-  const dataobj = await res["fields"]
-  return dataobj
+  ).catch((err)=>{console.log(err) 
+    return err})
+  const dataobj = await res
+  return dataobj.fields
 }
 
 export async function deleteByIdProduct(idProduct){

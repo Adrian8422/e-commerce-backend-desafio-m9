@@ -5,6 +5,7 @@ import { getOffsetAndLimitFromReq } from "lib/functions/requests";
 import { productIndex } from "lib/connections/algolia";
 import { getProductIdAlgolia } from "controllers/products";
 import * as yup from "yup"
+import { schemaQuery } from "lib/middlewares/schemaMiddleware";
 
 let querySchema = yup.object().shape({
   productId:yup.string().required(),
@@ -13,8 +14,8 @@ let querySchema = yup.object().shape({
 
 //realizarlo cuando vayamos por los endpoints owner
 
-module.exports = methods({
-  async get(req: NextApiRequest, res: NextApiResponse) {
+
+  async  function getHandler(req: NextApiRequest, res: NextApiResponse) {
     const productId = req.query.productId;
     const response = await getProductIdAlgolia(productId).catch((err) => {
       res.status(401).send({
@@ -24,5 +25,10 @@ module.exports = methods({
     });
 
     res.send(response);
-  },
-});
+  }
+  const handler = methods({
+    get:getHandler
+  })
+
+export  default schemaQuery(querySchema,handler)
+

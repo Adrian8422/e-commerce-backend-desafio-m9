@@ -75,15 +75,19 @@ export async function checkOrderAndCreateBilling(id){
   await myOrderDB.push()
   const user =  new User(myOrderDB.data.userId)
   const owner = new Owner(myOrderDB.data.ownerId)
+  const product =  await getProductIdAlgolia(order.data.productId)
+
   await user.pull()
   await owner.pull()
   await sendEmailSuccessSale(user.data.email);
   await  sendEmailOwnerSuccessVenta(owner.data.email)
-const newBilling =  await Billing.createBilling({
+   const newBilling =  await Billing.createBilling({
+    productId:product["objectID"],
+    title:product["title"],
     ownerId:owner.id,
     userId:user.id,
     address: user.data.address,
-    message:"Pedido realizado con éxito, realizar envío al usuario comprador",
+    message:`Te compraron ${product["title"]} , realizar envío al usuario comprador`,
     userEmail:user.data.email,
     name:user.data.name
      })
@@ -93,72 +97,4 @@ const newBilling =  await Billing.createBilling({
 
 } 
 
-// export async function readFirstEndpoint(data_id,type,body){
-// if(type == "payment"){
-// console.log(body)
-//   return body
-// }
-//   /// Hacer un if consultando si data_id es de tal valor al igual que con el type y si pasa eso esperado retornar el body 
 
-// }
-// export async function readSegundoEndpoint(topic,id,body){
-//     /// Hacer un if consultando si data_id es de tal valor al igual que con el type y si pasa eso esperado retornar el body 
-//     if(topic=="payment"){
-//       console.log(body)
-//       return body
-//     }
-// }
-
-// export async function getOrderAndUpdateStatusFromMP(topic,id) {
-//   console.log("entro en getOrderAndUpdate cs")
-
-   
-//     const order = await getMerchantOrder(id);
-//     if ((order.order_status = "paid")) {
-//       const orderId = order.external_reference;
-//       const myOrder = new Order(orderId);
-//       await myOrder.pull();
-   
-//       myOrder.data.status = "closed";
-//       await myOrder.push();
-//       const currentOrder = new Order(orderId)
-//       await currentOrder.pull()
-//       console.log("entro y vemos la orden nueva",currentOrder)
-//       return currentOrder
-   
-//       }
-    
-// }
-// export async function sendEmailSuccess(topic,id){
-//   console.log("entro en la funcion controller senemailSucces")
-//   const order = await getOrderAndUpdateStatusFromMP(topic,id)
-
-  
-//   if(order){
-
-//     const user = await new User(order.data.userId)
-//     const ownerProductList =await new Owner(order.data.ownerId)
-//     await user.pull()
-//     await ownerProductList.pull()
-
-//     if((order.data.status = "closed")){ 
-//       console.log("entro en la funcion para enviar los email a los users correspondientes")
-//       await sendEmailSuccessSale(user.data.email);
-  
-      
-//       console.log("data del owner en controllers a punto de enviar email",ownerProductList.data.email)
-//       await  sendEmailOwnerSuccessVenta(ownerProductList.data.email)
-//      const respuesta = await Billing.createBilling({
-//       ownerId:ownerProductList.id,
-//       userId:user.id,
-//       address: user.data.address,
-//       message:"Pedido realizado con éxito, realizar envío al usuario comprador",
-//       userEmail:user.data.email,
-//       name:user.data.name
-//        })
-//        console.log("registro billing en db",respuesta)
-//        return {order,user,respuesta}
-//       }
-//   }
-  
-// }

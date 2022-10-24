@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { createPreferenceAndOrderMp } from "controllers/orders";
 import * as yup  from "yup"
-import { schemaMiddlware } from "lib/middlewares/schemaMiddleware";
+import { schemaBodyAndQuery } from "lib/middlewares/schemaMiddleware";
 let querySchema = yup.object().shape({
   productId: yup.string().required(),
  
@@ -29,7 +29,7 @@ async function postHanlder(req: NextApiRequest, res: NextApiResponse, token) {
 
   res.send(respuesta);
 }
-const postHandlerWithValidation = schemaMiddlware(bodySchema,querySchema,postHanlder)
+const postHandlerWithValidation = schemaBodyAndQuery(bodySchema,querySchema,postHanlder)
 const handler = methods({
   post: postHandlerWithValidation,
 });

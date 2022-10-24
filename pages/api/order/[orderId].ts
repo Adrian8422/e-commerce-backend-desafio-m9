@@ -3,7 +3,7 @@ import methods from "micro-method-router";
 import { authMiddleware } from "lib/middlewares/authmiddleware";
 import { getOrderById } from "controllers/orders";
 import * as yup  from "yup"
-import { schemaMiddlware, schemaOrderId } from "lib/middlewares/schemaMiddleware";
+import { schemaQuery } from "lib/middlewares/schemaMiddleware";
 let querySchema = yup.object().shape({
   orderId:yup.string().required()
 }).noUnknown(true).strict()
@@ -18,7 +18,7 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
   })
   res.send(response);
 }
-const getHandlerWithValidation =schemaOrderId(querySchema,getHandler)
+const getHandlerWithValidation =schemaQuery(querySchema,getHandler)
 
 const handler = methods({
   get: getHandlerWithValidation,

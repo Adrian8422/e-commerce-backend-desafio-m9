@@ -8,16 +8,35 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next"
+    "start": "next",
+    "test": "ava"
+  },
+  "ava": {
+    "nodeArguments": [
+      "--loader=esbuild-node-loader",
+      "--experimental-specifier-resolution=node"
+    ],
+    "environmentVariables": {
+      "TESTING": "true",
+      "JWT_SECRET": "99498484984"
+    },
+    "extensions": {
+      "ts": "module"
+    }
   },
   "dependencies": {
+    "@esbuild-kit/esm-loader": "^2.5.0",
+    "@types/mock-req-res": "^1.1.3",
     "airtable": "^0.11.4",
     "algoliasearch": "^4.14.2",
+    "ava": "^4.3.3",
     "date-fns": "^2.29.2",
+    "esbuild-node-loader": "^0.8.0",
     "firebase-admin": "9.1.0",
     "jsonwebtoken": "^8.5.1",
     "mercadopago": "^1.5.14",
     "micro-method-router": "^0.1.0",
+    "mock-req-res": "^1.2.1",
     "next": "^12.2.5",
     "nodemailer": "^6.7.8",
     "parse-bearer-token": "^1.0.1",

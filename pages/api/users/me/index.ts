@@ -3,7 +3,7 @@ import { authMiddleware } from "lib/middlewares/authmiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import * as yup from "yup"
-import { schemaPatchAddress } from "lib/middlewares/schemaMiddleware";
+import { schemaBody } from "lib/middlewares/schemaMiddleware";
 
 async function getHandler(req: NextApiRequest, res: NextApiResponse, token) {
   const user = await getDataUser(token.userId);
@@ -31,7 +31,7 @@ async function patchHandler(req: NextApiRequest, res: NextApiResponse, token) {
 
   res.send(user);
 }
-const patchHandleWithValidation = schemaPatchAddress(bodySchema,patchHandler)
+const patchHandleWithValidation = schemaBody(bodySchema,patchHandler)
 const handler = methods({
   get: getHandler,
   patch: patchHandleWithValidation,
