@@ -75,19 +75,15 @@ export async function checkOrderAndCreateBilling(id){
   await myOrderDB.push()
   const user =  new User(myOrderDB.data.userId)
   const owner = new Owner(myOrderDB.data.ownerId)
-  const product =  await getProductIdAlgolia(order.data.productId)
-
   await user.pull()
   await owner.pull()
   await sendEmailSuccessSale(user.data.email);
   await  sendEmailOwnerSuccessVenta(owner.data.email)
    const newBilling =  await Billing.createBilling({
-    productId:product["objectID"],
-    title:product["title"],
     ownerId:owner.id,
     userId:user.id,
     address: user.data.address,
-    message:`Te compraron ${product["title"]} , realizar envío al usuario comprador`,
+    message:"Pedido realizado con éxito, realizar envío al usuario comprador",
     userEmail:user.data.email,
     name:user.data.name
      })

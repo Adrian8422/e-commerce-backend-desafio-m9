@@ -28,7 +28,7 @@ export async function addProductInCart(idsProducts,userId){
     
     const order = await Order.createOrder({
        ownerId:products.results[0]["ownerId"],
-       productId: products.results.map((prod)=> prod.objectID),
+       productsId: products.results.map((prod)=> prod.objectID),
        userId: userId,
        status: "pending",
        createdAt: new Date(),
