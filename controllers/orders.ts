@@ -75,33 +75,27 @@ export async function checkOrderAndCreateBilling(id){
   await myOrderDB.push()
   const user =  new User(myOrderDB.data.userId)
   const owner = new Owner(myOrderDB.data.ownerId)
+  const product =await getProductIdAlgolia(myOrderDB.data.productId)
   await user.pull()
   await owner.pull()
   await sendEmailSuccessSale(user.data.email);
   await  sendEmailOwnerSuccessVenta(owner.data.email)
-  await Billing.createBilling(
-    myOrderDB.data.productId.map(async (id)=>{
-      
-      const product =await getProductIdAlgolia(id)
-      
-      return    { productId:id,
-        title:product["title"],
-        ownerId:owner.id,
-        userId:user.id,
-        address: user.data.address,
-        message:`Te compraron ${product["title"]} , realizar envío al usuario comprador`,
-        userEmail:user.data.email,
-        name:user.data.name,
-        createdAt:new Date()
-      }
-      }
+   const newBilling =  await Billing.createBilling({
     
-     
-    )
+    productId:myOrderDB.data.productId.map((id)=>id),
+    title:product["title"],
+    ownerId:owner.id,
+    userId:user.id,
+    address: user.data.address,
+    message:`Te compraron ${product["title"]} , realizar envío al usuario comprador`,
+    userEmail:user.data.email,
+    name:user.data.name,
+    createdAt:new Date()
+     })
+
+     return newBilling
 
 
-
-  )
 } 
 
 
