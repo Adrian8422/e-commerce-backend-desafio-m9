@@ -6,6 +6,7 @@ import { createPreference, getMerchantOrder } from "lib/connections/mercadopago"
 import { sendEmailOwnerSuccessVenta, sendEmailSuccessSale } from "lib/connections/nodemailer";
 import { Owner } from "models/owner";
 import { Billing } from "models/billings";
+import { Cart } from "models/cart";
 type CreateOrderResponse={
   url:string
 }
@@ -75,8 +76,11 @@ export async function checkOrderAndCreateBilling(id){
   await myOrderDB.push()
   const user =  new User(myOrderDB.data.userId)
   const owner = new Owner(myOrderDB.data.ownerId)
+  const cart = new Cart(myOrderDB.data.userId)
+  await cart.pull()
   await user.pull()
   await owner.pull()
+  
   await sendEmailSuccessSale(user.data.email);
   await  sendEmailOwnerSuccessVenta(owner.data.email)
    const newBilling =  await Billing.createBilling({
@@ -86,12 +90,19 @@ export async function checkOrderAndCreateBilling(id){
     address: user.data.address,
     message:"Pedido realizado con éxito, realizar envío al usuario comprador",
     userEmail:user.data.email,
-    name:user.data.name
+    name:user.data.name,
+    status:"closed"
      })
+     if(newBilling){
+      cart.data =""
+      cart.push()
+     }
 
      return newBilling
 
 
 } 
+
+//// AHORA LO QUE TENGO QUE HACER ES UN IF EN EL CUAL PREGUNTE SI MY ORDER.DATA.PRODUCT ID ES UN ARRAY QUE HAGA DE UNNA FORMA Y SINO ES UN ARRAR QUE LO HAGA DE LA FORMA QUE YA LO HICE CON UN SOLO PRODUCTO Y CREO EL BILLING CORRECTAMENTE :D
 
 

@@ -20,7 +20,6 @@ export async function addProductInCart(idsProducts,userId){
         stock:prod["stock"],
         productId: prod["objectID"],
         userId: userId,
-        status: "pending",
         createdAt: new Date(),
       })
           
