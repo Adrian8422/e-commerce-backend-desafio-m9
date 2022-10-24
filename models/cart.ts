@@ -16,7 +16,7 @@ export class Cart {
     this.ref.update(this.data)
   }
   async delete (){
-    this.ref.delete(this.data)
+    this.ref.delete()
   }
   static async createProductInCart(data){
     const snap = await collection.add(data)
