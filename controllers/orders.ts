@@ -7,6 +7,7 @@ import { sendEmailOwnerSuccessVenta, sendEmailSuccessSale } from "lib/connection
 import { Owner } from "models/owner";
 import { Billing } from "models/billings";
 import { Cart } from "models/cart";
+import { quitAllProductsCart } from "./cart";
 type CreateOrderResponse={
   url:string
 }
@@ -76,10 +77,17 @@ export async function checkOrderAndCreateBilling(id){
   await myOrderDB.push()
   const user =  new User(myOrderDB.data.userId)
   const owner = new Owner(myOrderDB.data.ownerId)
-  const cart = new Cart(myOrderDB.data.userId)
-  await cart.pull()
+
+
+
+  
   await user.pull()
   await owner.pull()
+  
+
+  ////cart lo traemos para que una vez que se efectue todo se vacie el carrito automaticamente
+
+
   
   await sendEmailSuccessSale(user.data.email);
   await  sendEmailOwnerSuccessVenta(owner.data.email)
@@ -93,10 +101,8 @@ export async function checkOrderAndCreateBilling(id){
     name:user.data.name,
     status:"closed"
      })
-   if(newBilling.data.status =="closed"){
-  await cart.delete()
-    await cart.push()
-   }
+     await quitAllProductsCart(myOrderDB.data.userId)
+     
      return newBilling
 
 

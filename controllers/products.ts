@@ -38,7 +38,7 @@ export async function getProductIdAlgolia(productId) {
 export async function getArrayProductsIdAlgolia(productsIds){
   console.log(productsIds)
   const res = await productIndex.getObjects(productsIds)
-  console.log("a ver",res)
+  
   return res
 
 }

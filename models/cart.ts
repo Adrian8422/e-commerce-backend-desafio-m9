@@ -16,7 +16,24 @@ export class Cart {
     this.ref.update(this.data)
   }
   async delete (){
-    this.ref.delete()
+    return this.ref.delete()
+  }
+  static async productsCartGetByUserId(userId){
+    const results = await collection.where("userId","==",userId).get()
+    if(results.empty){
+      return null
+    }
+    return results.docs
+
+  }
+
+  static async destroyCart(id){
+      const deleted =  await collection.doc(id).delete()
+      if(deleted){
+        return {message:"se vació con éxito el carrito"}
+      } 
+    
+    
   }
   static async createProductInCart(data){
     const snap = await collection.add(data)

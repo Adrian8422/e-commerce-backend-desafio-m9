@@ -2,7 +2,7 @@ import { authMiddleware } from "lib/middlewares/authmiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { getAllMyOrders } from "controllers/orders";
-import { addProductInCart, quitProductCart } from "controllers/cart";
+import { addProductInCart, quitAllProductsCart, quitProductCart } from "controllers/cart";
 
 async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
   const {id} = req.query
@@ -16,9 +16,14 @@ async function deleteHandler (req:NextApiRequest,res:NextApiResponse){
   const response = await quitProductCart(id)
   res.send(response)
 }
+async function deleteAllProdutcsHandler (req:NextApiRequest,res:NextApiResponse,token){
+   const response = await quitAllProductsCart(token.userId)
+  res.send(response)
+}
+
 
 const handler = methods({
   post: postHandler,
-  delete:deleteHandler
+  delete:deleteAllProdutcsHandler
 });
 export default authMiddleware(handler);

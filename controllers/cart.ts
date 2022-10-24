@@ -72,3 +72,19 @@ return {url:createPreferenceMp.init_point}
 
   }
 
+  export async function quitAllProductsCart(idUser){
+    const products = await Cart.productsCartGetByUserId(idUser)
+    if(!products){
+      return {message:"no hay productos en el carrito"}
+    }
+    if(products){
+
+      products.map(async(oneProduct)=>{
+         const response = await Cart.destroyCart(oneProduct.id)
+      
+        return response
+      }
+      )
+    }
+  }
+  
