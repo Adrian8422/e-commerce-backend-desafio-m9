@@ -95,7 +95,7 @@ export async function checkOrderAndCreateBilling(id){
      })
      if(newBilling){
       cart.data =""
-      cart.push()
+    await cart.push()
      }
 
      return newBilling
