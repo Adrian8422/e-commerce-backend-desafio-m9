@@ -75,11 +75,7 @@ export async function checkOrderAndCreateBilling(id){
   await myOrderDB.push()
   const user =  new User(myOrderDB.data.userId)
   const owner = new Owner(myOrderDB.data.ownerId)
-  const mapProductsId =  myOrderDB.data.productId.map(async(oneId)=>{
-    return oneId
-    
-  })
-  const product =await getProductIdAlgolia(mapProductsId)
+  const product =await getProductIdAlgolia(myOrderDB.data.productId.map((id)=>id))
   await user.pull()
   await owner.pull()
   await sendEmailSuccessSale(user.data.email);
