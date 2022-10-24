@@ -75,12 +75,14 @@ export async function checkOrderAndCreateBilling(id){
   await myOrderDB.push()
   const user =  new User(myOrderDB.data.userId)
   const owner = new Owner(myOrderDB.data.ownerId)
-  const product =await getProductIdAlgolia(myOrderDB.data.productId.map((id)=>id))
-  await user.pull()
-  await owner.pull()
-  await sendEmailSuccessSale(user.data.email);
-  await  sendEmailOwnerSuccessVenta(owner.data.email)
-   const newBilling =  await Billing.createBilling({
+  myOrderDB.data.productId.map(async(id)=>{
+    const product =await getProductIdAlgolia(id)
+
+    await user.pull()
+    await owner.pull()
+    await sendEmailSuccessSale(user.data.email);
+    await  sendEmailOwnerSuccessVenta(owner.data.email)
+    const newBilling =  await Billing.createBilling({
     
     productId:product["objectID"],
     title:product["title"],
@@ -91,9 +93,10 @@ export async function checkOrderAndCreateBilling(id){
     userEmail:user.data.email,
     name:user.data.name,
     createdAt:new Date()
-     })
-
-     return newBilling
+  })
+  
+  return newBilling
+})
 
 
 } 
