@@ -93,8 +93,10 @@ export async function checkOrderAndCreateBilling(id){
     name:user.data.name,
     status:"closed"
      })
-     await cart.delete()
-
+   if(newBilling.data.status =="closed"){
+  await cart.delete()
+    await cart.push()
+   }
      return newBilling
 
 
