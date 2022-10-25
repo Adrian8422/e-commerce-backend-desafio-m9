@@ -40,7 +40,7 @@ export async function addProductInCart(idsProducts,userId){
        items: 
          products.results.map((producto)=>(
            {     
-             title: producto["title"],
+             title: products.results.map((prod)=>prod["title"]),
              description: producto["description"],
              picture_url: "http://www.myapp.com/myimage.jpg",
              quantity: 1,
@@ -65,6 +65,9 @@ return {url:createPreferenceMp.init_point}
   }
   export async function quitProductCart(idProduct){
     const product =  await Cart.productCartGetById(idProduct)
+    if(!product){
+      return {message:"no encontramos ese producto"}
+    }
     const deleteProduct = await Cart.deleteProductFromCart(product.id)
     return deleteProduct
     // const deleteProduct = await Cart.deleteProductFromCart()

@@ -11,11 +11,6 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
   console.log(response)
   res.send(response)
 }
-async function deleteHandler (req:NextApiRequest,res:NextApiResponse){
-  const {id} = req.query
-  const response = await quitProductCart(id)
-  res.send(response)
-}
 async function deleteAllProdutcsHandler (req:NextApiRequest,res:NextApiResponse,token){
    const response = await quitAllProductsCart(token.userId)
   res.send(response)
@@ -23,7 +18,8 @@ async function deleteAllProdutcsHandler (req:NextApiRequest,res:NextApiResponse,
 
 
 const handler = methods({
+  delete:deleteAllProdutcsHandler,
   post: postHandler,
-  delete:deleteAllProdutcsHandler
+  
 });
 export default authMiddleware(handler);
