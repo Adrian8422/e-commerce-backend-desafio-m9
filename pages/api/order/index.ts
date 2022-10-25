@@ -10,7 +10,8 @@ let querySchema = yup.object().shape({
 }).noUnknown(true).strict()
 let bodySchema = yup.object().shape({
   color: yup.string(),
-  version:yup.string()
+  version:yup.string(),
+  quantity:yup.number()
 
 }).noUnknown(true).strict()
 

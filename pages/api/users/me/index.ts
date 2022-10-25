@@ -4,9 +4,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import * as yup from "yup"
 import { schemaBody } from "lib/middlewares/schemaMiddleware";
+import { stockManagement } from "controllers/products";
 
 async function getHandler(req: NextApiRequest, res: NextApiResponse, token) {
   const user = await getDataUser(token.userId);
+ await stockManagement("recv6OPHQuChV0lfI",1) 
   res.send(user);
 }
 let bodySchema = yup.object().shape({

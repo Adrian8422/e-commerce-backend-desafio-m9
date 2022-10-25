@@ -3,7 +3,7 @@ import { Cart } from "models/cart";
 import { Order } from "models/orders";
 import { deleteByIdProduct, getArrayProductsIdAlgolia, getProductIdAlgolia } from "./products";
 
-export async function addProductInCart(idsProducts,userId){
+export async function addProductInCart(idsProducts,userId,dataBody){
   const products = await getArrayProductsIdAlgolia(idsProducts)
 
   if(!products){
@@ -17,10 +17,12 @@ export async function addProductInCart(idsProducts,userId){
         categories:prod["categories"],
         description:prod["description"],
         price:prod["price"],
-        stock:prod["stock"],
         productId: prod["objectID"],
         userId: userId,
         createdAt: new Date(),
+        aditional_info: {
+          ...dataBody,
+        },
       })
           
     })
@@ -31,6 +33,9 @@ export async function addProductInCart(idsProducts,userId){
        userId: userId,
        status: "pending",
        createdAt: new Date(),
+       aditional_info: {
+        ...dataBody,
+      },
        
      })
 
@@ -43,7 +48,7 @@ export async function addProductInCart(idsProducts,userId){
              title: producto["title"],
              description: producto["description"],
              picture_url: "http://www.myapp.com/myimage.jpg",
-             quantity: 1,
+             quantity: order.data.aditional_info.quantity,
              currency_id: "$",
              unit_price: producto["price"],
            }

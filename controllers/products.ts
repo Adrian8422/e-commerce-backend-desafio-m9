@@ -112,4 +112,33 @@ if(res){
   }
 }
 
+export async function stockManagement(idProduct,cantidad){
+  const searchProduct =   await airtableBase('Table 1').find("recv6OPHQuChV0lfI")
+  const product = await searchProduct
+  const stockActual = product.fields.stock as number
+  console.log("producto antes de  descontador stock",product.fields)
+
+   let newStock = (stockActual - cantidad) <= 0? 0  : (stockActual - cantidad ) 
+
+   console.log(product["stock"])
+   const res =await airtableBase('Table 1').update(idProduct, {
+ 
+     "stock": newStock,
+    
+   },
+   ).catch((err)=>{console.log(err) 
+     return err})
+   const dataobj = await res
+   console.log("ya realizado el cambio",dataobj)
+   return dataobj.fields
+}
+
+
+ //ver si puedo traer el producto desde airtable asi  el manejo de stock lo realizo desde allí para que este actualizado, porque no deberia impactar directamente en algolia porque se va a romper la línea, primero ataco airtable y la syncronizacion permite que algolia recoja el stock actualizado de airtable :DDD
+  
+
+
+
+
+
 

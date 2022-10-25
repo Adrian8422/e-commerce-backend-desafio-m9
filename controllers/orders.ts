@@ -35,7 +35,7 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) :P
           title: product["title"],
           description: product["description"],
           picture_url: "http://www.myapp.com/myimage.jpg",
-          quantity: 1,
+          quantity: order.data.aditional_info.quantity,
           currency_id: "$",
           unit_price: product["price"],
         },
