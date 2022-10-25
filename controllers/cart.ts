@@ -17,6 +17,7 @@ export async function addProductInCart(idsProducts,userId){
         categories:prod["categories"],
         description:prod["description"],
         price:prod["price"],
+        //colocar quantity
         stock:prod["stock"],
         productId: prod["objectID"],
         userId: userId,
