@@ -101,9 +101,14 @@ export async function checkOrderAndCreateBilling(id){
     name:user.data.name,
     status:"closed"
      })
-     const cantidadPedidas = myOrderDB.data.aditional_info.quantity
+
+
+     /// El error esta aca, que cuando hacemos el descuento de stock por compra de un solo producto sin carro realiza bien la tarea la funcion stockmanagement, pero cuando realizamos la pref desde el carrito con mas productos ahi se rompe la funcion por ende tampoco quita los productos del carrito en la base de datos :DDD Solucionarlo :_OPK=UY")YY)E
+
+     
+    //  const cantidadPedidas = myOrderDB.data.aditional_info.quantity
      // aca envio que producto y cuantos a la funcion stockManagement para que haga los calculos de stock :D
-     await stockManagement(myOrderDB.data.productId as string,cantidadPedidas as number) 
+    //  await stockManagement(myOrderDB.data.productId as string,cantidadPedidas as number) 
      await quitAllProductsCart(myOrderDB.data.userId)
 
      
