@@ -7,7 +7,7 @@ export async function addProductInCart(idsProducts,userId){
   const products = await getArrayProductsIdAlgolia(idsProducts)
 
   if(!products){
-    console.log("no encontramos ese producto")
+    console.log("no encontramos el producto")
     return null
   }
   products.results.map(async(prod)=>{
@@ -45,8 +45,7 @@ export async function addProductInCart(idsProducts,userId){
              currency_id: "$",
              unit_price: producto["price"],
            }
-           )
-         
+           ) 
        )
        ,
        back_urls: {
