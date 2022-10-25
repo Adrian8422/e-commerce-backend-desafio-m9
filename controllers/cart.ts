@@ -33,7 +33,6 @@ export async function addProductInCart(idsProducts,userId){
        createdAt: new Date(),
        
      })
-
      const createPreferenceMp = await createPreference({
        external_reference: order.id,
        items: 
