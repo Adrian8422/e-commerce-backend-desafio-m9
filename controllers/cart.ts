@@ -7,7 +7,7 @@ export async function addProductInCart(idsProducts,userId){
   const products = await getArrayProductsIdAlgolia(idsProducts)
 
   if(!products){
-    console.log("no encontramos el producto")
+    console.log("no encontramos ese producto")
     return null
   }
   products.results.map(async(prod)=>{
@@ -33,19 +33,22 @@ export async function addProductInCart(idsProducts,userId){
        createdAt: new Date(),
        
      })
+
      const createPreferenceMp = await createPreference({
        external_reference: order.id,
+
        items: 
          products.results.map((producto)=>(
            {     
-             title: products.results.map((prod)=>prod["title"]),
+             title: producto["title"],
              description: producto["description"],
              picture_url: "http://www.myapp.com/myimage.jpg",
              quantity: 1,
              currency_id: "$",
              unit_price: producto["price"],
            }
-           ) 
+           )
+         
        )
        ,
        back_urls: {
