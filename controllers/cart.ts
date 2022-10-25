@@ -10,22 +10,22 @@ export async function addProductInCart(idsProducts,userId){
     console.log("no encontramos ese producto")
     return null
   }
-  const productsInCart = products.results.map(async(prod)=>
-  await Cart.createProductInCart({
+  products.results.map(async(prod)=>{
+    await Cart.createProductInCart({
         ownerId:prod["ownerId"],
         title:prod["title"],
         categories:prod["categories"],
         description:prod["description"],
         price:prod["price"],
-        //colocar quantity
         stock:prod["stock"],
         productId: prod["objectID"],
         userId: userId,
         createdAt: new Date(),
       })
           
-    )
-     productsInCart.map(async(prod)=>{const productoAver = await (await prod).data })
+    })
+    /// es el nombre  productsInCart. del map que esta mas arriba para crear los productos en el cart, eso tenemos que ponerlo para ver como hacemos lo que escribi abajo 
+    //  productsInCart.map(async(prod)=>{const productoAver = await (await prod).data })
      /// esta linea de arriba ver como se la aplico al createPreference que esta abajo, para que haga el mapeo en base a los productos que ya agregamos al carrito. Tambien colocar el quantity en el body para que cuando agregemos los productos al carrito se especifique cuantos son los que compramos por ej 2. Y en base a la cantidad que pusimos en el carrito tambien colocarlo en quantity de la preferencia que creamos dsp de la order. Vamos que se puede Adri :DDDDD
     
     const order = await Order.createOrder({
@@ -36,6 +36,7 @@ export async function addProductInCart(idsProducts,userId){
        createdAt: new Date(),
        
      })
+
      const createPreferenceMp = await createPreference({
        external_reference: order.id,
 
