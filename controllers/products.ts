@@ -113,7 +113,7 @@ if(res){
 }
 
 export async function stockManagement(idProduct,cantidad){
-  const searchProduct =   await airtableBase('Table 1').find(idProduct)
+  const searchProduct =  await airtableBase('Table 1').find(idProduct)
   const product = await searchProduct
   const stockActual = product.fields.stock as number
   console.log("producto antes de  descontador stock",product.fields)
