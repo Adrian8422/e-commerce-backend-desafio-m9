@@ -101,9 +101,9 @@ export async function checkOrderAndCreateBilling(id){
     name:user.data.name,
     status:"closed"
      })
-    //  const cantidadPedidas = myOrderDB.data.aditional_info.quantity
+     const cantidadPedidas = myOrderDB.data.aditional_info.quantity
      // aca envio que producto y cuantos a la funcion stockManagement para que haga los calculos de stock :D
-    //  await stockManagement(myOrderDB.data.productId as string,cantidadPedidas as number) 
+     await stockManagement(myOrderDB.data.productId as string,cantidadPedidas as number) 
      await quitAllProductsCart(myOrderDB.data.userId)
 
      
