@@ -1,5 +1,5 @@
 import { productIndex } from "lib/connections/algolia";
-import { getProductIdAlgolia } from "./products";
+import { getProductIdAlgolia, stockManagement } from "./products";
 import { Order } from "models/orders";
 import { User } from "models/user";
 import { createPreference, getMerchantOrder } from "lib/connections/mercadopago";
@@ -101,6 +101,10 @@ export async function checkOrderAndCreateBilling(id){
     name:user.data.name,
     status:"closed"
      })
+     const cantidadPedidas = myOrderDB.data.aditional_info.quantity
+     // aca envio que producto y cuantos a la funcion stockManagement para que haga los calculos de stock :D
+     await stockManagement(myOrderDB.data.productId,cantidadPedidas) 
+
      await quitAllProductsCart(myOrderDB.data.userId)
      
      return newBilling
