@@ -1,7 +1,7 @@
 import admin from "firebase-admin";
 
 var serviceAccount = JSON.parse(process.env.FIREBASE_CONNECTION);
-// console.log(serviceAccount);
+console.log(serviceAccount);
 //  if (admin.app.length == 1) {
 //    console.log("todook");
 //  } else {
