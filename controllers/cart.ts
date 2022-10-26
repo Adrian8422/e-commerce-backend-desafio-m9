@@ -32,13 +32,17 @@ export async function addProductInCart(idsProducts,userId,dataBody){
     
     const order = await Order.createOrder({
        ownerId:products.results[0]["ownerId"],
-       productId: products.results.map((prod)=> prod.objectID),
+       productId: products.results.map((prod)=> {
+         return {
+          id:prod.objectID,
+          quantity:quantity || 1
+        }        
+        }
+        ),
        userId: userId,
        status: "pending",
        createdAt: new Date(),
-       aditional_info: {
-        quantity:quantity || 1,
-      },
+       
        
      })
 
