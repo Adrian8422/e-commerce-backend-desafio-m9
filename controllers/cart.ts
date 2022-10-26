@@ -3,7 +3,8 @@ import { Cart } from "models/cart";
 import { Order } from "models/orders";
 import { deleteByIdProduct, getArrayProductsIdAlgolia, getProductIdAlgolia } from "./products";
 
-export async function addProductInCart(idsProducts,userId){
+export async function addProductInCart(idsProducts,userId,dataBody){
+  const {quantity} = dataBody
   const products = await getArrayProductsIdAlgolia(idsProducts)
 
   if(!products){
@@ -35,6 +36,9 @@ export async function addProductInCart(idsProducts,userId){
        userId: userId,
        status: "pending",
        createdAt: new Date(),
+       aditional_info: {
+        quantity:quantity || 1,
+      },
        
      })
 
