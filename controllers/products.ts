@@ -128,7 +128,7 @@ export async function stockManagement(idProduct,cantidad){
    let newStock = (stockActual - cantidad) <= 0? 0  : (stockActual - cantidad ) 
 
    console.log(product["stock"])
-   const res =await airtableBase('Table 1').update(idProduct, {
+   const res =await airtableBase('Table 1').update(id, {
  
      "stock": newStock,
      
