@@ -113,10 +113,15 @@ if(res){
 }
 
 export async function stockManagement(idProduct,cantidad){
+
   //quizas se soluciona haciendo un mapeo, porque cuando lo hacemos con una compra sin producto funciona bien esta funcion, pero cuando la hacemos en el carro se rompe, quizas haciendo un mapeo lo solucionamos :DDD verlo
-  const searchProduct =  await airtableBase('Table 1').find(idProduct)
-  const product = await searchProduct
-  const stockActual = product.fields.stock as number
+
+
+  idProduct.map(async(id)=>{
+
+    const searchProduct =  await airtableBase('Table 1').find(id)
+    const product = await searchProduct
+    const stockActual = product.fields.stock as number
   console.log("producto antes de  descontador stock",product.fields)
 
    let newStock = (stockActual - cantidad) <= 0? 0  : (stockActual - cantidad ) 
@@ -125,14 +130,19 @@ export async function stockManagement(idProduct,cantidad){
    const res =await airtableBase('Table 1').update(idProduct, {
  
      "stock": newStock,
-    
-   },
-   ).catch((err)=>{console.log(err) 
-     return err})
-   const dataobj = await res
-   console.log("ya realizado el cambio",dataobj)
-   return dataobj.fields
+     
+    },
+    ).catch((err)=>{console.log(err) 
+      return err})
+      const dataobj = await res
+      console.log("ya realizado el cambio",dataobj)
+      return dataobj.fields
+    })
+
+
+
 }
+
 
 
  //ver si puedo traer el producto desde airtable asi  el manejo de stock lo realizo desde allí para que este actualizado, porque no deberia impactar directamente en algolia porque se va a romper la línea, primero ataco airtable y la syncronizacion permite que algolia recoja el stock actualizado de airtable :DDD
