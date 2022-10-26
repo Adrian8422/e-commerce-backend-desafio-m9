@@ -19,7 +19,7 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) :P
   }
   const order = await Order.createOrder({
     ownerId:product["ownerId"],
-    productId: product["objectID"],
+    productId: [product["objectID"]],
     userId: userId,
     status: "pending",
     createdAt: new Date(),

@@ -116,7 +116,7 @@ export async function stockManagement(idProduct,cantidad){
 
   //quizas se soluciona haciendo un mapeo, porque cuando lo hacemos con una compra sin producto funciona bien esta funcion, pero cuando la hacemos en el carro se rompe, quizas haciendo un mapeo lo solucionamos :DDD verlo
 
-idProduct=[]
+
   idProduct.map(async(id)=>{
 
     const searchProduct =  await airtableBase('Table 1').find(id)
