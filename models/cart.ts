@@ -19,11 +19,18 @@ export class Cart {
     return this.ref.delete()
   }
   static async productsCartGetByUserId(userId){
+    console.log("llega al modelo", userId)
     const results = await collection.where("userId","==",userId).get()
     if(results.empty){
       return null
     }
-    return results.docs
+    return results.docs.map((prod)=>
+    {
+      const newProdCart = new Cart(prod.id)
+      newProdCart.data = prod.data()
+      return newProdCart.data
+    
+    })
 
   }
 

@@ -92,7 +92,8 @@ export async function checkOrderAndCreateBilling(id){
   await sendEmailSuccessSale(user.data.email);
   await  sendEmailOwnerSuccessVenta(owner.data.email)
    const newBilling =  await Billing.createBilling({
-    productId:myOrderDB.data.productId,
+    productId:myOrderDB.data.productId.map((prodId)=>prodId),
+    quantity:myOrderDB.data.aditional_info.quantity.map((quantity)=>quantity),
     ownerId:owner.id,
     userId:user.id,
     address: user.data.address,

@@ -6,6 +6,9 @@ import * as yup from "yup"
 import { schemaBody } from "lib/middlewares/schemaMiddleware";
 
 async function getHandler(req: NextApiRequest, res: NextApiResponse, token) {
+
+ ///  llevar todo el objeto consoleado y preguntar en el controller si el id ese corresponde con el producto y si es asi le agregamos ese quantity al product id esto es un ejemplo que realizo en me para checar mas rapido los resultados 
+ 
   const user = await getDataUser(token.userId);
   res.send(user);
 }
