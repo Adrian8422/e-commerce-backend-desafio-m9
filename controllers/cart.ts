@@ -72,7 +72,7 @@ export async function addProductInCart(idProduct,userId,quantity){
 // return {url:createPreferenceMp.init_point}
   export async function createPreferenceAndOrder (userId){
     const productsInCart = await Cart.productsCartGetByUserId(userId)
-    // console.log("productos controller",productsInCart)
+     console.log("productos controller",productsInCart)
      if(!productsInCart)
      {
        return {message:"no encontramos productos de este usuario en el carro"}
@@ -84,13 +84,13 @@ export async function addProductInCart(idProduct,userId,quantity){
   // createPreferenceAndOrder   CART.TS CONTROLLER
   //// ACA TENGO QUE CREAR LA ORDEN UNA SOLA CON LOS DATOS DE TODOS LOS PRODUCTOS AGREGADOS AL CARRO Y LUEGO REALIZAR LA PREFERENCIA, DALE QUE SE PUEDE ADRIIIIII :DDDDDDD YA LE ENCONTRAMOS SOLUCION A LO DEL QUANTITY
      const order = await Order.createOrder({
-         ownerId:productsInCart[0]["ownerId"],
-         productId: productsInCart.map((prod)=> prod["productId"]),
+         ownerId:productsInCart.map((prod)=>prod.data.ownerId),
+         productId: productsInCart.map((prod)=> prod.data.productId),
          userId: userId,
-         status: "pending",
+         status: "pending", 
          createdAt: new Date(),
          aditional_info: {
-          quantity:productsInCart.map((prod)=>{ return {id:prod.productId,quantity:prod.quantity}})
+          quantity:productsInCart.map((prod)=>{ return {id:prod.data.productId,quantity:prod.data.quantity}})
         },
        
        })
@@ -101,12 +101,12 @@ export async function addProductInCart(idProduct,userId,quantity){
         items: 
           productsInCart.map((producto)=>(
             {     
-              title: producto["title"],
-              description: producto["description"],
+              title: producto.data.title,
+              description: producto.data.description,
               picture_url: "http://www.myapp.com/myimage.jpg",
-              quantity: 1,
+              quantity:producto.data.quantity,
               currency_id: "$",
-              unit_price: producto["price"],
+              unit_price: producto.data.price,
             }
             )
          
@@ -119,9 +119,13 @@ export async function addProductInCart(idProduct,userId,quantity){
         notification_url:
           "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
          //  "https://webhook.site/15eead9d-9d4c-4d53-8dc9-86ad7dba0dd4"
-         });
+         }
+         
+         
+         
+         );
          console.log("preference",createPreferenceMp.init_point)
- return {url:createPreferenceMp.init_point}
+             return {url:createPreferenceMp.init_point}
 
   }
    export async function quitProductCart(idProduct){
@@ -154,4 +158,6 @@ export async function addProductInCart(idProduct,userId,quantity){
       )
     }
   }
+
+  ///VER COMO ARREGLO ESTO DESTROY ALL, PORQUE SI DEVUELVO EN EL MODELO LA DATA. NO TENGO ACCESO AL ID DE LA DATABASE PARA BORRAR Y SI DEVUELVO EN EL MODELO EL PURO NO ME DEJA ACCEDER EN LA CREACION DE LA ORDEN , AHI LO VOY A SOLUCIONAR :DDD
   

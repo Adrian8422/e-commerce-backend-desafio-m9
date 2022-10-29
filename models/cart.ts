@@ -28,7 +28,7 @@ export class Cart {
     {
       const newProdCart = new Cart(prod.id)
       newProdCart.data = prod.data()
-      return newProdCart.data
+      return newProdCart
     
     })
 
