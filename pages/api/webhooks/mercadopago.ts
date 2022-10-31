@@ -21,9 +21,9 @@ let querySchema  = yup.object().shape({
    res.status(200).send({message:"todo salio ok tenes un producto para enviar"})
  
 }
-const postHandlerWithValidation = schemaQuery(querySchema,postHandler)
+// const postHandlerWithValidation = schemaQuery(querySchema,postHandler)
 const handler = methods({
-  post:postHandlerWithValidation
+  post:postHandler
 })
 export default middlewareMercadoPago(handler)
 
