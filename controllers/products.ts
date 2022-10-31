@@ -25,7 +25,7 @@ export async function getProductQueryInALgolia(search, req) {
 }
 
 export async function getProductIdAlgolia(productId) {
-  const res = await productIndex.findObject((hit) => hit.objectID == productId);
+  const res = await productIndex.findObject((hit) => hit.objectID == productId)
   const data = await res.object;
   if (data) {
     return data;

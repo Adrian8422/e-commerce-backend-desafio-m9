@@ -6,12 +6,10 @@ import * as yup from "yup"
 import { schemaBody } from "lib/middlewares/schemaMiddleware";
 
 async function getHandler(req: NextApiRequest, res: NextApiResponse, token) {
-
- ///  llevar todo el objeto consoleado y preguntar en el controller si el id ese corresponde con el producto y si es asi le agregamos ese quantity al product id esto es un ejemplo que realizo en me para checar mas rapido los resultados 
- 
-  const user = await getDataUser(token.userId);
+  const user = await getDataUser(token.userId).catch((err)=>res.status(401).send({error:err}))
   res.send(user);
 }
+//
 let bodySchema = yup.object().shape({
   name:yup.string().notRequired(),
   birthday:yup.string().notRequired(),
@@ -27,7 +25,7 @@ async function patchHandler(req: NextApiRequest, res: NextApiResponse, token) {
     address,
   }).catch((err)=>{
     res.status(401).send({
-      message:"error en modificar direccion del usuario",
+      message:"error en modificar datos del usuario",
       error:err
     })
   })

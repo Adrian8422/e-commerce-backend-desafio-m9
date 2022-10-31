@@ -11,11 +11,14 @@ import { quitAllProductsCart } from "./cart";
 type CreateOrderResponse={
   url:string
 }
-export async function createPreferenceAndOrderMp(productId, userId, dataBody) :Promise <CreateOrderResponse>{
+export async function createPreferenceAndOrderOneProductMp(productId, userId, color,version,quantity) :Promise <CreateOrderResponse>{
+  
   const product = await getProductIdAlgolia(productId)
+  console.log(product)
   if (!product) {
     console.log("no encontramos el producto en la base de datos");
-    return null;
+    return null
+  
   }
   const order = await Order.createOrder({
     ownerId:product["ownerId"],
@@ -24,7 +27,10 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) :P
     status: "pending",
     createdAt: new Date(),
     aditional_info: {
-      ...dataBody,
+      color,
+      version,
+      quantity: [quantity] 
+      ////NECESITO CONVERTIR ESTO DE ORDERS.TS CONTROLLER EN UN ARRAY EL QUANTITY ASI EN EL MOMENDO DE HACER EL BILLING 
     },
   });
   if (order) {
@@ -35,7 +41,7 @@ export async function createPreferenceAndOrderMp(productId, userId, dataBody) :P
           title: product["title"],
           description: product["description"],
           picture_url: "http://www.myapp.com/myimage.jpg",
-          quantity: order.data.aditional_info.quantity,
+          quantity: quantity,
           currency_id: "$",
           unit_price: product["price"],
         },

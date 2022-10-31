@@ -5,9 +5,8 @@ export async function getDataUser(userId: string) {
   return user.data;
 }
 
-///cambio de nombre a ese usuario
+///
 export async function patchUpdateDataUser(userId, data?) {
-  /// VER ACA EN EN EL ENDPOINT DONDE USAMOS ESTA FUNCION, COMO HACEMOS PARA QUE CUANDO EL USUARIO NO QUIERA CAMBAR ALGUNA DE LAS PROPIEDADES COMO NAME ADDRESS O BIRTHDAT QUE SE AUTOCOMPLETE CON LO ANTERIOR QUE TENIA PUESTO--- VER COMO LO HACEMOS
   console.log("data en controller", data);
   const { name, birthday, address } = data;
   const user = new User(userId);

@@ -1,16 +1,7 @@
-import { getMerchantOrder } from "lib/connections/mercadopago";
-import {
-  sendEmailOwnerSuccessVenta,
-  sendEmailSuccessSale,
-  sendEmailToUser,
-} from "lib/connections/nodemailer";
-import { authMiddleware } from "lib/middlewares/authmiddleware";
-import { Order } from "models/orders";
+
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
-import { User } from "models/user";
-// import { readFirstEndpoint, readSegundoEndpoint, sendEmailSuccess } from "controllers/orders";
-// import {  sendEmailSuccess } from "controllers/orders";
+
 import * as yup from "yup"
 import { schemaQuery } from "lib/middlewares/schemaMiddleware";
 import { Owner } from "models/owner";
@@ -28,13 +19,12 @@ let querySchema  = yup.object().shape({
  await checkOrderAndCreateBilling(id)
  
    res.status(200).send({message:"todo salio ok tenes un producto para enviar"})
-  //pasamos el req al middleware
  
 }
+const postHandlerWithValidation = schemaQuery(querySchema,postHandler)
 const handler = methods({
-  post:postHandler
+  post:postHandlerWithValidation
 })
 export default middlewareMercadoPago(handler)
 
-// export default schemaOrderId(querySchema,getAndFilaniceOrder)
 

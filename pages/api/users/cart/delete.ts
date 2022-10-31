@@ -11,7 +11,7 @@ const querySchema = yup.object().shape({
 
 async function deleteHandler (req:NextApiRequest,res:NextApiResponse){
   const {idProd} = req.query
-  const response = await quitProductCart(idProd)
+  const response = await quitProductCart(idProd).catch((err)=>res.status(401).send({message:err}))
   res.send(response)
 }
 

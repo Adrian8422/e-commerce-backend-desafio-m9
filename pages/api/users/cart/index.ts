@@ -19,19 +19,19 @@ let bodySchema = yup.object().shape({
 async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
   const {id} = req.query
   const {quantity} = req.body
-  const quantityNumber = parseInt(quantity)
+ 
   const userId = token.userId
-  const response = await addProductInCart(id,userId,quantityNumber)
-  console.log(response)
+  const response = await addProductInCart(id,userId,quantity).catch((err)=>res.status(401).send({message:err}))
+  
   res.send(response)
 }
 async function getMyCart(req:NextApiRequest,res:NextApiResponse,token){
   const userId = token.userId
-  const response = await getMyCurrentCart(userId)
+  const response = await getMyCurrentCart(userId).catch((err)=>res.status(401).send({message:err}))
   res.send(response)
 }
 async function deleteAllProdutcsHandler (req:NextApiRequest,res:NextApiResponse,token){
-   const response = await quitAllProductsCart(token.userId)
+   const response = await quitAllProductsCart(token.userId).catch((err)=>res.status(401).send({message:err}))
   res.send(response)
 }
 

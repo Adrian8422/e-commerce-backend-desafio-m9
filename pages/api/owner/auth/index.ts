@@ -7,7 +7,7 @@ const bodySchema = yup.object().shape({
 }).noUnknown(true).strict()
  async function postHandler (req:NextApiRequest,res:NextApiResponse){
   const {email} = req.body
-const response=await  sendCodeOwner(email)
+const response=await  sendCodeOwner(email).catch((err)=>res.status(401).send({message:err}))
 console.log(response)
 res.send(response)
 }

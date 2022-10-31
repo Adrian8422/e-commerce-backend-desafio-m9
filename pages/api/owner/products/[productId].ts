@@ -42,13 +42,12 @@ console.log(response)
 
 }
 
-
 async function deleteHandler(req:NextApiRequest,res:NextApiResponse, token){
   const {productId} = req.query
   if(!productId){
     res.status(400).send({message:"error no encontramos id del producto"})
   }
-  const response =  await deleteByIdProduct(productId)
+  const response =  await deleteByIdProduct(productId).catch((err)=>res.status(401).send({message:err}))
   res.send(response)
 
 }

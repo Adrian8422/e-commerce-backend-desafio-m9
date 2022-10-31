@@ -7,7 +7,7 @@ import { schemaQuery } from "lib/middlewares/schemaMiddleware";
 const querySchema = yup.object().shape({
   offset:yup.string().required(),
   limit: yup.string().required()
-
+  
 }) .noUnknown(true).strict()
 async function getHandler (req:NextApiRequest,res:NextApiResponse,token){
   const {offset,limit} = req.query
@@ -18,10 +18,6 @@ async function getHandler (req:NextApiRequest,res:NextApiResponse,token){
     error:err
   })})
   res.send(response)
-
-
-  
-
 }
 
 const getHandlerWithValidation = schemaQuery(querySchema,getHandler)
