@@ -8,6 +8,7 @@ import { Owner } from "models/owner";
 import { Billing } from "models/billings";
 import { Cart } from "models/cart";
 import { quitAllProductsCart } from "./cart";
+import { getDataOwner } from "./owner";
 type CreateOrderResponse={
   url:string
 }
@@ -108,12 +109,12 @@ export async function checkOrderAndCreateBilling(id){
      })
 
      console.log("billing a ver si se crea",newBilling)
+     const owner = await getDataOwner(myOrderDB.data.ownerId)
      
-          const owner = new Owner(myOrderDB.data.ownerId)
-          await owner.pull()
+        
 
      await sendEmailSuccessSale(user.data.email);
-     await  sendEmailOwnerSuccessVenta(owner.data.email)
+     await  sendEmailOwnerSuccessVenta(owner.email)
 
 
      /// El error esta aca, que cuando hacemos el descuento de stock por compra de un solo producto sin carro realiza bien la tarea la funcion stockmanagement, pero cuando realizamos la pref desde el carrito con mas productos ahi se rompe la funcion por ende tampoco quita los productos del carrito en la base de datos :DDD Solucionarlo :_OPK=UY")YY)E
