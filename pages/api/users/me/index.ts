@@ -4,8 +4,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import * as yup from "yup"
 import { schemaBody } from "lib/middlewares/schemaMiddleware";
+import { Order } from "models/orders";
 
 async function getHandler(req: NextApiRequest, res: NextApiResponse, token) {
+  
+ 
+
+
   const user = await getDataUser(token.userId).catch((err)=>res.status(401).send({error:err}))
   res.send(user);
 }

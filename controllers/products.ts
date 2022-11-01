@@ -114,27 +114,23 @@ if(res){
 
 export async function stockManagement(idProduct,cantidad){
   console.log("stock management llega asi el id product",idProduct)
-  console.log("asi llega cantidad",cantidad)
 
   //quizas se soluciona haciendo un mapeo, porque cuando lo hacemos con una compra sin producto funciona bien esta funcion, pero cuando la hacemos en el carro se rompe, quizas haciendo un mapeo lo solucionamos :DDD verlo
 
 
-  idProduct.map(async(id)=>{
+  // idProduct.map(async(id)=>{
 
-    const searchProduct =  await airtableBase('Table 1').find(id)
+    const searchProduct =  await airtableBase('Table 1').find(idProduct)
     const product = await searchProduct
     const stockActual = product.fields.stock as number
-    console.log("producto antes de  descontador stock",product.fields)
-  const calculoStockNew =await cantidad.map((quantity)=>{
-     let newStock = (stockActual - quantity) <= 0? 0  : (stockActual - quantity ) 
-     return newStock
+  console.log("producto antes de  descontador stock",product.fields)
 
-   })
+   let newStock = (stockActual - cantidad) <= 0? 0  : (stockActual - cantidad ) 
 
    console.log(product["stock"])
-   const res =await airtableBase('Table 1').update(id, {
+   const res =await airtableBase('Table 1').update(idProduct, {
  
-     "stock": calculoStockNew,
+     "stock": newStock,
      
     },
     ).catch((err)=>{console.log(err) 
@@ -142,7 +138,7 @@ export async function stockManagement(idProduct,cantidad){
       const dataobj = await res
       console.log("ya realizado el cambio",dataobj)
       return dataobj.fields
-    })
+    
 
 
 
