@@ -16,7 +16,7 @@ export class Order {
 
   async pull() {
     const snap = await this.ref.get();
-    this.data = snap.data();
+   return this.data = snap.data();
   }
   async push() {
     this.ref.update(this.data);
