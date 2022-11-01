@@ -24,6 +24,7 @@ export  function middlewareMercadoPago(callback){
       res.status(200).send({message:"orden ya cerrada"})
     }
     if(myOrderDB.data.status =="pending"){
+      console.log("entro aca en ejecutar la funcion luego del middle")
       callback(req,res)
     }
 
