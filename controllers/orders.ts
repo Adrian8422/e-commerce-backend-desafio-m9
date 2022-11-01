@@ -15,7 +15,7 @@ type CreateOrderResponse={
 export async function createPreferenceAndOrderOneProductMp(productId, userId, color,version,quantity) :Promise <CreateOrderResponse>{
   
   const product = await getProductIdAlgolia(productId)
-  console.log(product)
+  console.log("producto",product)
   if (!product) {
     console.log("no encontramos el producto en la base de datos");
     return null
