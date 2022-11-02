@@ -11,8 +11,6 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
  
 }
 
-
-
 const handler = methods({
 
   post: postHandler,

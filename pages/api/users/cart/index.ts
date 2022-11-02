@@ -1,7 +1,6 @@
 import { authMiddleware } from "lib/middlewares/authmiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
-import { getAllMyOrders } from "controllers/orders";
 import * as yup  from "yup"
 
 import { addProductInCart, getMyCurrentCart, quitAllProductsCart} from "controllers/cart";
@@ -18,10 +17,10 @@ let bodySchema = yup.object().shape({
 }).noUnknown(true).strict()
 async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
   const {id} = req.query
-  const {quantity} = req.body
+  const {quantity} = req.body 
  
   const userId = token.userId
-  const response = await addProductInCart(id,userId,quantity).catch((err)=>res.status(401).send({message:err}))
+  const response = await addProductInCart(id,userId,quantity as  number).catch((err)=>res.status(401).send({message:err}))
   
   res.send(response)
 }

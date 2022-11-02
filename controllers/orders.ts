@@ -1,12 +1,9 @@
-import { productIndex } from "lib/connections/algolia";
 import { getProductIdAlgolia, stockManagement } from "./products";
 import { Order } from "models/orders";
 import { User } from "models/user";
 import { createPreference, getMerchantOrder } from "lib/connections/mercadopago";
 import { sendEmailOwnerSuccessVenta, sendEmailSuccessSale } from "lib/connections/nodemailer";
-import { Owner } from "models/owner";
 import { Billing } from "models/billings";
-import { Cart } from "models/cart";
 import { quitAllProductsCart } from "./cart";
 import { getDataOwner } from "./owner";
 type CreateOrderResponse={
@@ -15,12 +12,21 @@ type CreateOrderResponse={
 export async function createPreferenceAndOrderOneProductMp(productId, userId, color,version,quantity) :Promise <CreateOrderResponse>{
   
   const product = await getProductIdAlgolia(productId)
+  if(product["stock"] == 0){
+    return {
+      url:"producto agotado,no podemos continuar"
+    }
+  }
+  if((product["stock"] - quantity) < 0){
+    return {url:`no hay esa cantidad de stock, solo quedan ${product["stock"]}`}
+  }
   console.log("producto",product)
   if (!product) {
     console.log("no encontramos el producto en la base de datos");
     return null
   
   }
+  /// Creacion de preference y orden en base de datos
   const order = await Order.createOrder({
     ownerId:product["ownerId"],
     productId: [product["objectID"]],
@@ -30,8 +36,8 @@ export async function createPreferenceAndOrderOneProductMp(productId, userId, co
     aditional_info: {
       color,
       version,
-      quantity: [quantity] 
-      ////NECESITO CONVERTIR ESTO DE ORDERS.TS CONTROLLER EN UN ARRAY EL QUANTITY ASI EN EL MOMENDO DE HACER EL BILLING 
+      
+      quantity: [{id: product["objectID"],quantity:quantity} ]
     },
   });
   if (order) {
@@ -59,7 +65,7 @@ export async function createPreferenceAndOrderOneProductMp(productId, userId, co
   }
 }
 
-export async function getAllMyOrders(userId) {
+export async function getAllMyOrders(userId:string) {
   const response = await Order.getMyOrders(userId);
   if (!response) {
     console.log("no hay ordenes con este usuario");
@@ -83,19 +89,9 @@ export async function checkOrderAndCreateBilling(id){
   myOrderDB.data.status = "closed"
   await myOrderDB.push()
   const user =  new User(myOrderDB.data.userId)
-
-
-
-
-  
   await user.pull()
   
-
-  ////cart lo traemos para que una vez que se efectue todo se vacie el carrito automaticamente
-
-
-  
-  
+  ///Creamos una  collection Billing para que el dueño del e-commerce pueda chequear que, quien y cuando compraron X producto
    const newBilling =  await Billing.createBilling({
     productId:myOrderDB.data.productId.map((prodId)=>prodId),
     quantity:myOrderDB.data.aditional_info.quantity.map((quantity)=>quantity),
@@ -108,28 +104,21 @@ export async function checkOrderAndCreateBilling(id){
     status:"closed"
      })
 
-     console.log("billing a ver si se crea",newBilling)
      const owner = await getDataOwner(myOrderDB.data.ownerId)
-     
-        
-
+     /// Envío de email a usuario comprador y vendedor
      await sendEmailSuccessSale(user.data.email);
      await  sendEmailOwnerSuccessVenta(owner.email)
 
-
-     /// El error esta aca, que cuando hacemos el descuento de stock por compra de un solo producto sin carro realiza bien la tarea la funcion stockmanagement, pero cuando realizamos la pref desde el carrito con mas productos ahi se rompe la funcion por ende tampoco quita los productos del carrito en la base de datos :DDD Solucionarlo :_OPK=UY")YY)E
      const quantityAndId = myOrderDB.data.aditional_info.quantity
 
-
-
-     
-     
-     // aca envio que producto y cuantos a la funcion stockManagement para que haga los calculos de stock :D
+    /// Manejo de stock en airtable
      quantityAndId.map(async(prod)=>{
        await stockManagement(prod.id ,prod.quantity) 
 
      })
-     await quitAllProductsCart(myOrderDB.data.userId)
+
+    /// Una vez efectuada la compra el carrito se vacía automaticamente
+       await quitAllProductsCart(myOrderDB.data.userId)
 
      
      return newBilling

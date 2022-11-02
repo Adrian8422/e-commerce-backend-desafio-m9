@@ -3,15 +3,22 @@ import { Cart } from "models/cart";
 import { Order } from "models/orders";
 import { getProductIdAlgolia } from "./products";
 
-export async function addProductInCart(idProduct,userId,quantity){
+export async function addProductInCart(idProduct,userId:string,quantity:number){
   
   const product = await getProductIdAlgolia(idProduct)
+  if(product["stock"] == 0){
+    return {message:"producto agotado, no podemos agregarlo al carrito"}
+  }
+  if((product["stock"] - quantity) < 0){
+    return {message:`no hay esa cantidad de stock, solo quedan ${product["stock"]}`}
+  }
 
   if(!product){
     console.log("no encontramos ese producto")
     return null
   }
- 
+
+ ///Creacion de collection Cart (Carrito de compras)
    const addProductInCart =  await Cart.createProductInCart({
        ownerId:product["ownerId"],
        title:product["title"],
@@ -26,14 +33,13 @@ export async function addProductInCart(idProduct,userId,quantity){
       
       return addProductInCart.data
     }
-
-  export async function createPreferenceAndOrder (userId){
+/// Creacion de preference y orden en base de datos
+  export async function createPreferenceAndOrder (userId:string){
     const productsInCart = await Cart.productsCartGetByUserId(userId)
-    
      if(!productsInCart)
      {
        return {message:"no encontramos productos de este usuario en el carro"}
-   }
+     }
      const order = await Order.createOrder({
          ownerId:productsInCart[0].data.ownerId,
          productId: productsInCart.map((prod)=> prod.data.productId),
@@ -45,9 +51,9 @@ export async function addProductInCart(idProduct,userId,quantity){
         },
        
        })
-  //  return order.data
-         const createPreferenceMp = await createPreference({
-        external_reference: order.id,
+  
+      const createPreferenceMp = await createPreference({
+     external_reference: order.id,
 
         items: 
           productsInCart.map((producto)=>(
@@ -58,9 +64,7 @@ export async function addProductInCart(idProduct,userId,quantity){
               quantity:producto.data.quantity,
               currency_id: "$",
               unit_price: producto.data.price,
-            }
-            )
-         
+            })
         )
         ,
         back_urls: {
@@ -70,16 +74,12 @@ export async function addProductInCart(idProduct,userId,quantity){
         notification_url:
           "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
          //  "https://webhook.site/15eead9d-9d4c-4d53-8dc9-86ad7dba0dd4"
-         }
-         
-         
-         
-         );
-        
-             return {url:createPreferenceMp.init_point}
+         }    
+         );      
+    return {url:createPreferenceMp.init_point}
 
   }
-   export async function quitProductCart(idProduct){
+   export async function quitProductCart(idProduct:string){
      const product =  await Cart.productCartGetById(idProduct)
      if(!product){
        return {message:"no encontramos ese producto"}
@@ -89,7 +89,7 @@ export async function addProductInCart(idProduct,userId,quantity){
   
 
   }
-  export async function getMyCurrentCart(userId){
+  export async function getMyCurrentCart(userId:string){
     const products = await Cart.productsCartGetByUserId(userId)
     if(!products){
       return {message:"no hay productos en el carrito"}
@@ -97,7 +97,7 @@ export async function addProductInCart(idProduct,userId,quantity){
     return products
 
   }
-  export async function quitAllProductsCart(idUser){
+  export async function quitAllProductsCart(idUser:string){
     const products = await Cart.productsCartGetByUserId(idUser)
     if(!products){
       return {message:"no hay productos en el carrito"}
@@ -113,6 +113,4 @@ export async function addProductInCart(idProduct,userId,quantity){
       return {message:"productos borrados con éxito"}
     }
   }
-
-  ///VER COMO ARREGLO ESTO DESTROY ALL, PORQUE SI DEVUELVO EN EL MODELO LA DATA. NO TENGO ACCESO AL ID DE LA DATABASE PARA BORRAR Y SI DEVUELVO EN EL MODELO EL PURO NO ME DEJA ACCEDER EN LA CREACION DE LA ORDEN , AHI LO VOY A SOLUCIONAR :DDD
   

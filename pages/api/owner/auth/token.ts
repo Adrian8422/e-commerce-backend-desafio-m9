@@ -11,7 +11,7 @@ let bodySchema = yup.object().shape({
 
 async function postHanlder(req:NextApiRequest,res:NextApiResponse){
 const {email,code} =req.body
-const response= await  authOwnerCodeReturnToken(email,code)
+const response= await  authOwnerCodeReturnToken(email,code).catch((err)=>res.status(401).send({error:err}))
 res.send(response)
 }
 

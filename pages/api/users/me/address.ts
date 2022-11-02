@@ -1,8 +1,4 @@
-import {
-  getDataUser,
-  patchDataAddress,
-  patchUpdateDataUser,
-} from "controllers/user";
+import {patchDataAddress} from "controllers/user";
 import { authMiddleware } from "lib/middlewares/authmiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";

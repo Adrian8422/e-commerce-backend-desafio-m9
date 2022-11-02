@@ -9,7 +9,7 @@ import { generate } from "lib/functions/jwt";
 var seed = "VARIABLENene";
 var random = gen.create(seed);
 
-export async function findOrCreateOwner (email){
+export async function findOrCreateOwner (email:string){
   const authOwner= await AuthOwner.getByEmail(email)
   if(authOwner){
     console.log("encontramos el owner")
@@ -34,7 +34,11 @@ export async function findOrCreateOwner (email){
 
 }
 
-export async function sendCodeOwner(email:string){
+type SendCode = {
+  message:string
+}
+
+export async function sendCodeOwner(email:string):Promise <SendCode>{
   const authOwner = await findOrCreateOwner(email)
 
   const code = random.intBetween(100000, 999999);
@@ -51,7 +55,15 @@ export async function sendCodeOwner(email:string){
     message: "codigo enviado a su email :D",
   };
 }
-export async function authOwnerCodeReturnToken (email,code){
+
+type AuthOwnerReturnToken={
+  token:string
+}
+type AuthOwnerReturnMessage = {
+  message:string
+}
+
+export async function authOwnerCodeReturnToken (email:string,code:number):Promise <AuthOwnerReturnToken | AuthOwnerReturnMessage>{ 
 
   const authOwner= await AuthOwner.findByEmailAndCode(email,code)
   if(!authOwner){
@@ -64,8 +76,8 @@ export async function authOwnerCodeReturnToken (email,code){
     await authOwner.push()
     return {message:"código expirado"}
   }
-  var tokenGenerate = generate({ownerId:authOwner.data.ownerId})
-  return {tokenGenerate}
+  var token = generate({ownerId:authOwner.data.ownerId})
+  return {token}
 
 }
 

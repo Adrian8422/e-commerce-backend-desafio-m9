@@ -1,6 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-import methods from "micro-method-router";
 import { authCodeReturnToken } from "controllers/auth";
 import * as yup from "yup"
 import { schemaAuth } from "lib/middlewares/schemaMiddleware";

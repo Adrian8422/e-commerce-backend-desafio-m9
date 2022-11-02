@@ -1,12 +1,33 @@
 import { User } from "models/user";
-export async function getDataUser(userId: string) {
+
+type GetDataUser = {
+  user:{
+    address?:string
+    birthday?:string
+    createdAt:Date
+    email:string
+    name?:string
+  }
+}
+
+export async function getDataUser(userId: string):Promise <GetDataUser> {
   const user = new User(userId);
   await user.pull();
   return user.data;
 }
 
+
+type UpdateDataUser = {
+  user:{
+    address?:string
+    birthday?:string
+    createdAt:Date
+    email:string
+    name?:string
+  }
+}
 ///
-export async function patchUpdateDataUser(userId, data?) {
+export async function patchUpdateDataUser(userId:string, data?):Promise <UpdateDataUser> {
   console.log("data en controller", data);
   const { name, birthday, address } = data;
   const user = new User(userId);
@@ -18,7 +39,13 @@ export async function patchUpdateDataUser(userId, data?) {
   return user.data;
 }
 
-export async function patchDataAddress(userId, newAddress) {
+type patchDataAddress = {
+  user:{
+    address:string
+  }
+}
+
+export async function patchDataAddress(userId:string, newAddress:string):Promise <patchDataAddress> {
   const user = new User(userId);
   await user.pull();
   user.data.address = newAddress;

@@ -2,7 +2,7 @@ import { airtableBase } from "lib/connections/airtable";
 import { productIndex } from "lib/connections/algolia";
 import { getOffsetAndLimitFromReq } from "lib/functions/requests";
 
-export async function getProductQueryInALgolia(search, req) {
+export async function getProductQueryInALgolia(search:string, req) {
   const { offset, limit } = getOffsetAndLimitFromReq(req);
 
   const res = await productIndex.search(search, {
@@ -24,7 +24,7 @@ export async function getProductQueryInALgolia(search, req) {
   };
 }
 
-export async function getProductIdAlgolia(productId) {
+export async function getProductIdAlgolia(productId:string) {
   const res = await productIndex.findObject((hit) => hit.objectID == productId)
   const data = await res.object;
   if (data) {
@@ -36,7 +36,6 @@ export async function getProductIdAlgolia(productId) {
   }
 }
 export async function getArrayProductsIdAlgolia(productsIds){
-  console.log(productsIds)
   const res = await productIndex.getObjects(productsIds)
   
   return res
@@ -65,24 +64,26 @@ export async function createProductsInAirtable (data){
 }
 
 export async  function getAllProductsOwner(offset,limit){
-const res = await productIndex.search("",{
-  offset:offset,
-  length:limit
-})
+    const res = await productIndex.search("",{
+    offset:offset,
+    length:limit
+    })
 
-const hits = await res.hits
-if(!hits){
-  return {message:"no encontramos ningun producto"}
-}
-return {
-  results: hits,
-  pagination: {
-    offset,
-    limit,
-    total: hits.length,
-  }
+    const hits = await res.hits
+    if(!hits){
+     return {message:"no encontramos ningun producto"}
+    }
+     return {
+      results: hits,
+      pagination: {
+      offset,
+      limit,
+      total: hits.length,
+     }
 } 
 }
+
+
 export async function updateByIdProduct(idProduct,ownerId,data){
   const {title,price,categories,shipment,description,stock} = data
   const res =await airtableBase('Table 1').update(idProduct, {
@@ -100,7 +101,7 @@ export async function updateByIdProduct(idProduct,ownerId,data){
   return dataobj.fields
 }
 
-export async function deleteByIdProduct(idProduct){
+export async function deleteByIdProduct(idProduct:string){
 
  const res= await airtableBase('Table 1').destroy( idProduct).catch((err)=>{console.error(err) 
 }
@@ -112,31 +113,21 @@ if(res){
   }
 }
 
+
+    /// Manejo de stock en airtable
 export async function stockManagement(idProduct,cantidad){
-  console.log("stock management llega asi el id product",idProduct)
-
-  //quizas se soluciona haciendo un mapeo, porque cuando lo hacemos con una compra sin producto funciona bien esta funcion, pero cuando la hacemos en el carro se rompe, quizas haciendo un mapeo lo solucionamos :DDD verlo
-
-
-  // idProduct.map(async(id)=>{
-
     const searchProduct =  await airtableBase('Table 1').find(idProduct)
     const product = await searchProduct
     const stockActual = product.fields.stock as number
-  console.log("producto antes de  descontador stock",product.fields)
-
-   let newStock = (stockActual - cantidad) <= 0? 0  : (stockActual - cantidad ) 
+    let newStock = (stockActual - cantidad) <= 0? 0  : (stockActual -  cantidad ) 
 
    console.log(product["stock"])
    const res =await airtableBase('Table 1').update(idProduct, {
- 
-     "stock": newStock,
-     
+     "stock": newStock, 
     },
     ).catch((err)=>{console.log(err) 
       return err})
       const dataobj = await res
-      console.log("ya realizado el cambio",dataobj)
       return dataobj.fields
     
 
@@ -146,7 +137,6 @@ export async function stockManagement(idProduct,cantidad){
 
 
 
- //ver si puedo traer el producto desde airtable asi  el manejo de stock lo realizo desde allí para que este actualizado, porque no deberia impactar directamente en algolia porque se va a romper la línea, primero ataco airtable y la syncronizacion permite que algolia recoja el stock actualizado de airtable :DDD
   
 
 

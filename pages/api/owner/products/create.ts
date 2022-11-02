@@ -15,10 +15,7 @@ const bodySchema  = yup.object().shape({
 }).noUnknown(true).strict()
 async function postHandler(req:NextApiRequest,res:NextApiResponse, token){
   const ownerId = token.ownerId
-  console.log("id del owner",token)
   const {title,price,categories,shipment,description,stock} = req.body
-
-
  const response =await createProductsInAirtable({
   ownerId,title,price,categories,shipment,description,stock
  })

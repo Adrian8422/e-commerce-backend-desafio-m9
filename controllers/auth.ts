@@ -9,6 +9,7 @@ import { generate } from "lib/functions/jwt";
 var seed = "VARIABLEN";
 var random = gen.create(seed);
 
+
 export async function findOrCreateAuthAndUser(email: string) {
   const auth = await Auth.findByEmail(email);
 
@@ -31,8 +32,14 @@ export async function findOrCreateAuthAndUser(email: string) {
     return newAuth;
   }
 }
+type SendCode ={
+  token:string
+}
+type SendMessage={
+  message:string
+}
 
-export async function sendCode(email: string) {
+export async function sendCode(email: string): Promise <SendCode | SendMessage > {
   const auth = await findOrCreateAuthAndUser(email);
   const code = random.intBetween(100000, 999999);
   const now = new Date();
@@ -52,7 +59,15 @@ export async function sendCode(email: string) {
   };
 }
 
-export async function authCodeReturnToken(email: string, code: number) {
+
+
+type AuthCodeReturnToken ={
+  token:string
+}
+type AuthCodeReturnMessage={
+  message:string
+}
+export async function authCodeReturnToken(email: string, code: number) :Promise <AuthCodeReturnToken | AuthCodeReturnMessage>{
   const auth = await Auth.findByEmailAndCode(email, code);
   if (!auth) {
     return {
@@ -66,8 +81,8 @@ export async function authCodeReturnToken(email: string, code: number) {
     auth.push();
     return { message: "código expirado, volve a pedir tu nuevo código" };
   } else {
-    var tokenGenerate = generate({ userId: auth.data.userId });
+    var token = generate({ userId: auth.data.userId });
     console.log("token generado");
-    return { tokenGenerate };
+    return { token };
   }
 }

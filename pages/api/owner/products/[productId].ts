@@ -8,8 +8,8 @@ const querySchemaGet = yup.object().shape({
   productId: yup.string().required()
 }).noUnknown(true).strict()
 async function getHandler (req:NextApiRequest,res:NextApiResponse,token){
-  const {productId} = req.query
-  const response = await getProductIdAlgolia(productId).catch((err)=>{
+  const {productId} = req.query 
+  const response = await getProductIdAlgolia(productId as string).catch((err)=>{
     res.status(401).send({message:err})
   })
   res.send(response)
@@ -37,7 +37,6 @@ async function patchHandler(req:NextApiRequest,res:NextApiResponse, token){
   const response = await updateByIdProduct(productId,ownerId,{
     title,price,categories,shipment,description,stock
   })
-console.log(response)
   res.send(response)
 
 }
@@ -47,7 +46,7 @@ async function deleteHandler(req:NextApiRequest,res:NextApiResponse, token){
   if(!productId){
     res.status(400).send({message:"error no encontramos id del producto"})
   }
-  const response =  await deleteByIdProduct(productId).catch((err)=>res.status(401).send({message:err}))
+  const response =  await deleteByIdProduct(productId as string).catch((err)=>res.status(401).send({message:err}))
   res.send(response)
 
 }

@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
 import { sendCode } from "controllers/auth";
 import * as yup from "yup"
 import { schemaAuth } from "lib/middlewares/schemaMiddleware";
