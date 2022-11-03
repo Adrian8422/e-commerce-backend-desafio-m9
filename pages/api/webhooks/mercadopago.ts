@@ -1,11 +1,6 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
-
-import * as yup from "yup"
-import { schemaQuery } from "lib/middlewares/schemaMiddleware";
-import { Owner } from "models/owner";
-import { Billing } from "models/billings";
 import { middlewareMercadoPago } from "lib/middlewares/mercadopagoMiddle";
 import { checkOrderAndCreateBilling } from "controllers/orders";
 
