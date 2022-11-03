@@ -25,7 +25,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           };
         });
         if (obj) {
-        await  productIndex.saveObjects(obj);
+       const productos = await  productIndex.saveObjects(obj);
+       console.log("a ver que datos hay",productos)
         }
 
         // To fetch the next page of records, call `fetchNextPage`.
@@ -40,6 +41,5 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         }
       }
     );
-    console.log("a ver que datos hay",productIndex)
   res.send("terminó now");
 }
