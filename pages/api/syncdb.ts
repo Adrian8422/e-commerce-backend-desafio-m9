@@ -5,18 +5,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 
 
-export default function (req: NextApiRequest, res: NextApiResponse) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
 
-  airtableBase("Table 1")
+  await airtableBase("Table 1")
     .select({
       // Selecting the first 3 records in Grid view:
       pageSize: 10,
     })
     .eachPage(
-      function page(records, fetchNextPage) {
+      async function page(records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
 
-        const obj = records.map(function (record) {
+        const obj = await records.map(function (record) {
           console.log("unoporuno",record)
           return {
             objectID: record.id,
@@ -25,7 +25,7 @@ export default function (req: NextApiRequest, res: NextApiResponse) {
           };
         });
         if (obj) {
-          productIndex.saveObjects(obj);
+        await  productIndex.saveObjects(obj);
         }
 
         // To fetch the next page of records, call `fetchNextPage`.
@@ -40,6 +40,6 @@ export default function (req: NextApiRequest, res: NextApiResponse) {
         }
       }
     );
-    console.log("a ver que datos hay",airtableBase("Table 1"))
-  res.send("terminó");
+    console.log("a ver que datos hay",productIndex)
+  res.send("terminó now");
 }
