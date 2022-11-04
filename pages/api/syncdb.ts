@@ -16,7 +16,7 @@ export default  function (req: NextApiRequest, res: NextApiResponse) {
       async function page(records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
 
-        const obj =  records.map(function (record) {
+        const obj =  await records.map(function (record) {
           console.log("unoporuno",record)
           return {
             objectID: record.id,
