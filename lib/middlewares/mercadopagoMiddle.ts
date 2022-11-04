@@ -12,6 +12,9 @@ export  function middlewareMercadoPago(callback){
     if(topic !== "merchant_order"){
      res.status(200) 
     }
+    if(topic=="payment"){
+      res.status(200)
+    }
     const order = await getMerchantOrder(id);
     if(order.order_status !=="paid"){
     res.status(200)

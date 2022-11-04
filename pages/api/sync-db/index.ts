@@ -44,4 +44,5 @@ export default  function (req: NextApiRequest, res: NextApiResponse) {
       }
     );
   res.send("terminó now");
+  
 }
