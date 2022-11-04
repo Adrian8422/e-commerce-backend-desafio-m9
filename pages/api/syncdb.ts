@@ -16,19 +16,22 @@ export default  function (req: NextApiRequest, res: NextApiResponse) {
       async function page(records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
 
-        const obj =  await records.map(function (record) {
-          console.log("unoporuno",record)
-          return {
+         await records.map(async function (record) {
+          // console.log("unoporuno",record)
+          const objetoRecord= {
             objectID: record.id,
             ownerId:record["ownerId"],
             ...record.fields,
           };
+         const addProductInAlgolia = await productIndex.saveObject(objetoRecord)
+         console.log("veamos que pasa",addProductInAlgolia)
         });
-        if (obj) {
-       const productos = await productIndex.saveObjects(obj)
-       const aversillegaron = await productIndex.getObjects(productos.objectIDs)
-       console.log("a ver que datos hay en los productos para algolia",aversillegaron)
-        }
+        // if (obj) {
+
+      //  const productos = await productIndex.saveObjects(obj)
+      //  const aversillegaron = await productIndex.getObjects(productos.objectIDs)
+      //  console.log("a ver que datos hay en los productos para algolia",aversillegaron)
+        // }
 
         // To fetch the next page of records, call `fetchNextPage`.
         // If there are more records, `page` will get called again.
