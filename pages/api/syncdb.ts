@@ -26,8 +26,8 @@ export default  function (req: NextApiRequest, res: NextApiResponse) {
         });
         if (obj) {
        const productos = await productIndex.saveObjects(obj)
-       
-       console.log("a ver que datos hay en los productos para algolia",productos)
+       const aversillegaron = await productIndex.getObjects(productos.objectIDs)
+       console.log("a ver que datos hay en los productos para algolia",aversillegaron)
         }
 
         // To fetch the next page of records, call `fetchNextPage`.
