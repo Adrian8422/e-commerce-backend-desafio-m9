@@ -25,8 +25,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           };
         });
         if (obj) {
-       const productos = await  productIndex.saveObjects(obj);
-       console.log("a ver que datos hay",productos)
+       const productos = await  productIndex.saveObjects(obj).catch((err)=>{
+        console.log("que error sucedio",err)
+       })
+       console.log("a ver que datos hay en los productos para algolia",productos)
         }
 
         // To fetch the next page of records, call `fetchNextPage`.
