@@ -5,18 +5,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default  function (req: NextApiRequest, res: NextApiResponse) {
 
-  await airtableBase("Table 1")
+   airtableBase("Table 1")
     .select({
       // Selecting the first 3 records in Grid view:
       pageSize: 10,
     })
     .eachPage(
-      async function page(records, fetchNextPage) {
+      function page(records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
 
-        const obj = await records.map(function (record) {
+        const obj =  records.map(function (record) {
           console.log("unoporuno",record)
           return {
             objectID: record.id,
@@ -25,7 +25,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           };
         });
         if (obj) {
-       const productos = await  productIndex.saveObjects(obj).catch((err)=>{
+       const productos = productIndex.saveObjects(obj).catch((err)=>{
         console.log("que error sucedio",err)
        })
        console.log("a ver que datos hay en los productos para algolia",productos)
