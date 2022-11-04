@@ -13,7 +13,7 @@ export default  function (req: NextApiRequest, res: NextApiResponse) {
       pageSize: 10,
     })
     .eachPage(
-      function page(records, fetchNextPage) {
+      async function page(records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
 
         const obj =  records.map(function (record) {
@@ -25,9 +25,8 @@ export default  function (req: NextApiRequest, res: NextApiResponse) {
           };
         });
         if (obj) {
-       const productos = productIndex.saveObjects(obj).catch((err)=>{
-        console.log("que error sucedio",err)
-       })
+       const productos = await productIndex.saveObjects(obj)
+       
        console.log("a ver que datos hay en los productos para algolia",productos)
         }
 
