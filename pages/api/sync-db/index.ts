@@ -5,44 +5,32 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 
 
-export default  function (req: NextApiRequest, res: NextApiResponse) {
+export default function (req: NextApiRequest, res: NextApiResponse) {
+  try {
+     airtableBase("Table 1")
+        .select({})
+        .eachPage(
+           async function (records, fetchNextPage) {
+              const results = records.map((record) => {
+                 return {
+                    objectID: record.id,
+                    ...record.fields,
+                 };
+              });
 
-   airtableBase("Table 1")
-    .select({
-      // Selecting the first 3 records in Grid view:
-      pageSize: 10,
-    })
-    .eachPage(
-       function (records, fetchNextPage) {
-        // This function (`page`) will get called for each page of records.
-// chequear ahora sin el nombre de la funcion 
-        const obj =  records.map(function (record) {
-          console.log("unoporuno",record)
-          return {
-            objectID: record.id,
-            ownerId:record["ownerId"],
-            ...record.fields,
-          };
-        });
-        if (obj) {
-         productIndex.saveObjects(obj).then((objeto)=>{
+              await productIndex.saveObjects(results);
+              fetchNextPage();
+           },
 
-         console.log("a ver que datos hay",objeto)
-       })
-        }
-
-        // To fetch the next page of records, call `fetchNextPage`.
-        // If there are more records, `page` will get called again.
-        // If there are no more records, `done` will get called.
-        fetchNextPage();
-      },
-      function done(err) {
-        if (err) {
-          console.error(err);
-          return;
-        }
-      }
-    );
-  res.send("terminó now");
-  
+           function done(err) {
+              if (err) {
+                 console.error(err);
+                 return;
+              }
+              res.status(200).send("Done");
+           }
+        );
+  } catch (err) {
+     res.status(500).send({ message: err });
+  }
 }
