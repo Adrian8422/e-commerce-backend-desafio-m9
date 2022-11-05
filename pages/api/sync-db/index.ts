@@ -13,9 +13,9 @@ export default  function (req: NextApiRequest, res: NextApiResponse) {
       pageSize: 10,
     })
     .eachPage(
-       function page(records, fetchNextPage) {
+       function (records, fetchNextPage) {
         // This function (`page`) will get called for each page of records.
-
+// chequear ahora sin el nombre de la funcion 
         const obj =  records.map(function (record) {
           console.log("unoporuno",record)
           return {
