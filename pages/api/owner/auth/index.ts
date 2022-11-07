@@ -7,7 +7,7 @@ const bodySchema = yup.object().shape({
 }).noUnknown(true).strict()
  async function postHandler (req:NextApiRequest,res:NextApiResponse){
   const {email} = req.body
-const response=await  sendCodeOwner(email).catch((err)=>res.status(401).send({message:err}))
+const response=await  sendCodeOwner(email).catch((err)=>res.status(401).send({error:err, meesage:"email incorrecto, vuelve a probar"}))
 res.send(response)
 }
 export default schemaAuth(bodySchema,postHandler)

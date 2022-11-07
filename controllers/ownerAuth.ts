@@ -9,28 +9,18 @@ import { generate } from "lib/functions/jwt";
 var seed = "VARIABLENene";
 var random = gen.create(seed);
 
-export async function findOrCreateOwner (email:string){
+export async function findOwnerProducts (email:string){
   const authOwner= await AuthOwner.getByEmail(email)
   if(authOwner){
     console.log("encontramos el owner")
-       authOwner.data.code=123223
-    await authOwner.push()
     return authOwner
-  }else {
-    const newOwner = await Owner.createOwner({
-      email:email,
-      createdAt:new Date()
-    })
-    const newAuthOwner = await AuthOwner.createAuthOwner({
-      ownerId:newOwner.id,
-      email:email,
-      expires:new Date(),
-      code:"",
-      createdAt:new Date()
-    })
- 
-    return newAuthOwner.data
   }
+    
+ 
+ if(!authOwner){
+  return null
+ }
+  
 
 }
 
@@ -39,13 +29,13 @@ type SendCode = {
 }
 
 export async function sendCodeOwner(email:string):Promise <SendCode>{
-  const authOwner = await findOrCreateOwner(email)
+  const authOwner = await findOwnerProducts(email)
 
   const code = random.intBetween(100000, 999999);
   const now = new Date();
   const inTwentyMinutesExpires = addMinutes(now, 20);
   if(!authOwner){
-    return {message:"error en find or create"}
+    return {message:"email incorrecto, prueba nuevamente"}
   }
   authOwner.data.code = code
   authOwner.data.expires  = inTwentyMinutesExpires

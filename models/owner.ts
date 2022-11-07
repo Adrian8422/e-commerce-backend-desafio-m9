@@ -15,12 +15,6 @@ export class Owner {
   }
   async push (){
     this.ref.update(this.data)
-  }
-  static async  createOwner(data){
-    const snap = await  collection.add(data)
-    const newOwner = new Owner(snap.id)
-    newOwner.data = data
-    return newOwner
-  }
+  } 
 
 }
