@@ -20,6 +20,6 @@ _Backend (API REST Serverless) de una plataforma en donde los usuarios tendrán 
  
  https://documenter.getpostman.com/view/18745177/2s8YYENjjD
  
- <h2>Tecnologías utilizadas</h2>
+ <h2>Technologies</h2>
  
  NextJS - NodeJS - Typescript - Mercado pago - Firebase(firestore) - Nodemailer - Airtable
