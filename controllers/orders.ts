@@ -81,7 +81,7 @@ export async function getOrderById(idOrder) {
   return order;
 }
 
-export async function checkOrderAndCreateBilling(id){
+export async function   checkOrderAndCreateBilling(id){
   const order = await getMerchantOrder(id);
   const orderId = order.external_reference;
   const myOrderDB = new Order(orderId);

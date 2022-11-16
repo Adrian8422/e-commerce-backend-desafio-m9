@@ -137,6 +137,14 @@ export async function stockManagement(idProduct,cantidad){
 
 
 
+export async function getAllidProd(){
+  const res = await productIndex.search("")
+  const data = await res.hits
+  const  productsIds = data.map((prod)=>{
+    return prod.objectID
+  })
+  return  productsIds
+}
   
 
 
