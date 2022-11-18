@@ -47,7 +47,6 @@ export class Auth {
     newAuth.data = data;
     return newAuth;
   }
-  
 
   static async findByEmailAndCode(email: string, code: number) {
     const cleanEmail = Auth.cleanEmail(email);

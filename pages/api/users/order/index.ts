@@ -2,36 +2,47 @@ import { authMiddleware } from "lib/middlewares/authmiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { createPreferenceAndOrderOneProductMp } from "controllers/orders";
-import * as yup  from "yup"
+import * as yup from "yup";
 import { schemaBodyAndQuery } from "lib/middlewares/schemaMiddleware";
-let querySchema = yup.object().shape({
-  productId: yup.string().required(),
- 
-}).noUnknown(true).strict()
-let bodySchema = yup.object().shape({
-  color: yup.string(),
-  version:yup.string(),
-  quantity:yup.number().required()
-
-}).noUnknown(true).strict()
+const querySchema = yup
+  .object()
+  .shape({
+    productId: yup.string().required(),
+  })
+  .noUnknown(true)
+  .strict();
+const bodySchema = yup
+  .object()
+  .shape({
+    color: yup.string(),
+    version: yup.string(),
+    quantity: yup.number().required(),
+  })
+  .noUnknown(true)
+  .strict();
 
 async function postHanlder(req: NextApiRequest, res: NextApiResponse, token) {
   const { productId } = req.query;
-  const {color,version,quantity} = req.body
-  
+  const { color, version, quantity } = req.body;
+
   const userId = token.userId;
   const respuesta = await createPreferenceAndOrderOneProductMp(
     productId,
     userId,
-    color,version,quantity
-  )
-  .catch((err) => {
-     res.status(400).send({ message: "no encontramos el producto", error: err });
-   });
+    color,
+    version,
+    quantity
+  ).catch((err) => {
+    res.status(400).send({ message: "no encontramos el producto", error: err });
+  });
 
   res.send(respuesta);
 }
-const postHandlerWithValidation = schemaBodyAndQuery(bodySchema,querySchema,postHanlder)
+const postHandlerWithValidation = schemaBodyAndQuery(
+  bodySchema,
+  querySchema,
+  postHanlder
+);
 const handler = methods({
   post: postHandlerWithValidation,
 });

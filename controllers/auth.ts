@@ -9,7 +9,6 @@ import { generate } from "lib/functions/jwt";
 var seed = "VARIABLEN";
 var random = gen.create(seed);
 
-
 export async function findOrCreateAuthAndUser(email: string) {
   const auth = await Auth.findByEmail(email);
 
@@ -32,14 +31,14 @@ export async function findOrCreateAuthAndUser(email: string) {
     return newAuth;
   }
 }
-type SendCode ={
-  token:string
-}
-type SendMessage={
-  message:string
-}
+type SendCode = {
+  token: string;
+};
+type SendMessage = {
+  message: string;
+};
 
-export async function sendCode(email: string): Promise <SendCode | SendMessage > {
+export async function sendCode(email: string): Promise<SendCode | SendMessage> {
   const auth = await findOrCreateAuthAndUser(email);
   const code = random.intBetween(100000, 999999);
   const now = new Date();
@@ -59,15 +58,16 @@ export async function sendCode(email: string): Promise <SendCode | SendMessage >
   };
 }
 
-
-
-type AuthCodeReturnToken ={
-  token:string
-}
-type AuthCodeReturnMessage={
-  message:string
-}
-export async function authCodeReturnToken(email: string, code: number) :Promise <AuthCodeReturnToken | AuthCodeReturnMessage>{
+type AuthCodeReturnToken = {
+  token: string;
+};
+type AuthCodeReturnMessage = {
+  message: string;
+};
+export async function authCodeReturnToken(
+  email: string,
+  code: number
+): Promise<AuthCodeReturnToken | AuthCodeReturnMessage> {
   const auth = await Auth.findByEmailAndCode(email, code);
   if (!auth) {
     return {

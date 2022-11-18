@@ -1,33 +1,35 @@
 import { User } from "models/user";
 
 type GetDataUser = {
-  user:{
-    address?:string
-    birthday?:string
-    createdAt:Date
-    email:string
-    name?:string
-  }
-}
+  user: {
+    address?: string;
+    birthday?: string;
+    createdAt: Date;
+    email: string;
+    name?: string;
+  };
+};
 
-export async function getDataUser(userId: string):Promise <GetDataUser> {
+export async function getDataUser(userId: string): Promise<GetDataUser> {
   const user = new User(userId);
   await user.pull();
   return user.data;
 }
 
-
 type UpdateDataUser = {
-  user:{
-    address?:string
-    birthday?:string
-    createdAt:Date
-    email:string
-    name?:string
-  }
-}
+  user: {
+    address?: string;
+    birthday?: string;
+    createdAt: Date;
+    email: string;
+    name?: string;
+  };
+};
 ///
-export async function patchUpdateDataUser(userId:string, data?):Promise <UpdateDataUser> {
+export async function patchUpdateDataUser(
+  userId: string,
+  data?
+): Promise<UpdateDataUser> {
   console.log("data en controller", data);
   const { name, birthday, address } = data;
   const user = new User(userId);
@@ -40,12 +42,15 @@ export async function patchUpdateDataUser(userId:string, data?):Promise <UpdateD
 }
 
 type patchDataAddress = {
-  user:{
-    address:string
-  }
-}
+  user: {
+    address: string;
+  };
+};
 
-export async function patchDataAddress(userId:string, newAddress:string):Promise <patchDataAddress> {
+export async function patchDataAddress(
+  userId: string,
+  newAddress: string
+): Promise<patchDataAddress> {
   const user = new User(userId);
   await user.pull();
   user.data.address = newAddress;

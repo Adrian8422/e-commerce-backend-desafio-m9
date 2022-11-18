@@ -13,7 +13,6 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse, token) {
   });
 
   res.send(response);
-  
 }
 
 const handler = methods({
