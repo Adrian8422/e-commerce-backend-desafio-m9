@@ -23,10 +23,9 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 const handlerCors = async (req: NextRequest, res: NextApiResponse) => {
-  const corsValidation = await middlewareCors(req);
-  console.log("corserere", corsValidation);
+  const corsValidation = middlewareCors(req);
   if (corsValidation) {
-    return schemaAuth(bodySchema, postHandler);
+    schemaAuth(bodySchema, postHandler);
   }
 };
 
