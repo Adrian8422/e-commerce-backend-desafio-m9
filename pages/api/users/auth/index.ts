@@ -3,6 +3,7 @@ import NextCors from "nextjs-cors";
 import { sendCode } from "controllers/auth";
 import * as yup from "yup";
 import { schemaAuth } from "lib/middlewares/schemaMiddleware";
+import { middlewareCors } from "lib/middlewares/cors";
 const bodySchema = yup
   .object()
   .shape({
@@ -12,11 +13,7 @@ const bodySchema = yup
   .strict();
 
 async function postHandler(req: NextApiRequest, res: NextApiResponse) {
-  await NextCors(req, res, {
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    origin: "*",
-    optionsSuccessStatus: 200,
-  });
+  middlewareCors(req);
   const { email } = req.body;
   const response = await sendCode(email).catch((err) => {
     res.status(401).send({
