@@ -38,6 +38,7 @@
     "micro-method-router": "^0.1.0",
     "mock-req-res": "^1.2.1",
     "next": "^12.2.5",
+    "nextjs-cors": "^2.1.2",
     "nodemailer": "^6.7.8",
     "parse-bearer-token": "^1.0.1",
     "random-seed": "^0.3.0",
