@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { sendCode } from "controllers/auth";
 import * as yup from "yup";
 import { schemaAuth } from "lib/middlewares/schemaMiddleware";
+import { middlewareCors } from "pages/api/middleware";
+import { NextRequest } from "next/server";
 const bodySchema = yup
   .object()
   .shape({
@@ -20,4 +22,11 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   res.send(response);
 }
 
-export default schemaAuth(bodySchema, postHandler);
+const handlerCors = async (req: NextRequest, res: NextApiResponse) => {
+  const corsValidation = middlewareCors(req);
+  if (corsValidation) {
+    return schemaAuth(bodySchema, postHandler);
+  }
+};
+
+export default handlerCors;
