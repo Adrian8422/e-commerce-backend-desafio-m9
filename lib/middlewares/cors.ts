@@ -14,9 +14,9 @@ import NextCors from "nextjs-cors";
 // }
 
 export function middlewareCors(callback) {
-  return function (req: NextRequest) {
+  return async function (req: NextRequest) {
     if (req.method == "OPTIONS") {
-      return new Response(null, {
+      return await new Response(null, {
         status: 204,
         headers: {
           "Access-Control-Allow-Credentials": "true",
