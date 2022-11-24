@@ -13,7 +13,7 @@ const bodySchema = yup
   .strict();
 
 async function postHandler(
-  req: NextApiRequest | NextRequest,
+  req: NextRequest | NextApiRequest,
   res: NextApiResponse
 ) {
   middlewareCors(req as NextRequest);
