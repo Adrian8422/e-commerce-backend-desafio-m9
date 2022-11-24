@@ -12,11 +12,7 @@ const bodySchema = yup
   .noUnknown(true)
   .strict();
 
-async function postHandler(
-  req: NextRequest | NextApiRequest,
-  res: NextApiResponse
-) {
-  middlewareCors(req as NextRequest);
+async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   const { email } = req.body;
   const response = await sendCode(email).catch((err) => {
     res.status(401).send({
