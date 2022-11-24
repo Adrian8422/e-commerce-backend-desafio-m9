@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 
 export function middlewareCors(req: NextRequest) {
+  console.log("entro aca");
   if (req.method == "OPTIONS") {
     return new Response(null, {
       status: 204,
