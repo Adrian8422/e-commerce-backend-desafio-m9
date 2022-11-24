@@ -4,6 +4,7 @@ import methods from "micro-method-router";
 import { getProductIdAlgolia } from "controllers/products";
 import * as yup from "yup";
 import { schemaQuery } from "lib/middlewares/schemaMiddleware";
+import { middlewareCors } from "lib/middlewares/cors";
 
 const querySchema = yup
   .object()
@@ -28,4 +29,6 @@ const handler = methods({
   get: getHandler,
 });
 
-export default schemaQuery(querySchema, handler);
+const handlerWithValidation = schemaQuery(querySchema, handler);
+
+export default middlewareCors(handlerWithValidation);

@@ -11,6 +11,7 @@ import {
   schemaBodyAndQuery,
   schemaQuery,
 } from "lib/middlewares/schemaMiddleware";
+import { middlewareCors } from "lib/middlewares/cors";
 const querySchemaGet = yup
   .object()
   .shape({
@@ -88,4 +89,6 @@ const handler = methods({
   delete: deleteHandler,
 });
 
-export default authMiddleware(handler);
+const handlerWithValidation = authMiddleware(handler);
+
+export default middlewareCors(handlerWithValidation);

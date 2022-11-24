@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { schemaBody } from "lib/middlewares/schemaMiddleware";
 import * as yup from "yup";
+import { middlewareCors } from "lib/middlewares/cors";
 
 const bodySchema = yup
   .object()
@@ -31,4 +32,6 @@ const patchAddressWithValidate = schemaBody(bodySchema, handlerAddress);
 const handler = methods({
   patch: patchAddressWithValidate,
 });
-export default authMiddleware(handler);
+const handlerWithValidation = authMiddleware(handler);
+
+export default middlewareCors(handlerWithValidation);

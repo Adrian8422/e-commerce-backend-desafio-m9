@@ -4,6 +4,7 @@ import methods from "micro-method-router";
 import { createPreferenceAndOrderOneProductMp } from "controllers/orders";
 import * as yup from "yup";
 import { schemaBodyAndQuery } from "lib/middlewares/schemaMiddleware";
+import { middlewareCors } from "lib/middlewares/cors";
 const querySchema = yup
   .object()
   .shape({
@@ -47,4 +48,5 @@ const handler = methods({
   post: postHandlerWithValidation,
 });
 
-export default authMiddleware(handler);
+const handlerWithValidation = authMiddleware(handler);
+export default middlewareCors(handlerWithValidation);

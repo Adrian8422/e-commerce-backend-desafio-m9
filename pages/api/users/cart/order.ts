@@ -2,6 +2,7 @@ import { authMiddleware } from "lib/middlewares/authmiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { createPreferenceAndOrder } from "controllers/cart";
+import { middlewareCors } from "lib/middlewares/cors";
 
 async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
   const idUser = token.userId;
@@ -14,4 +15,6 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
 const handler = methods({
   post: postHandler,
 });
-export default authMiddleware(handler);
+const handlerWithValidation = authMiddleware(handler);
+
+export default middlewareCors(handlerWithValidation);

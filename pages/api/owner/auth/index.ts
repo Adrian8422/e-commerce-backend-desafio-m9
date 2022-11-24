@@ -1,4 +1,5 @@
 import { sendCodeOwner } from "controllers/ownerAuth";
+import { middlewareCors } from "lib/middlewares/cors";
 import { schemaAuth } from "lib/middlewares/schemaMiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as yup from "yup";
@@ -18,4 +19,6 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   );
   res.send(response);
 }
-export default schemaAuth(bodySchema, postHandler);
+const handlerWithValidation = schemaAuth(bodySchema, postHandler);
+
+export default middlewareCors(handlerWithValidation);

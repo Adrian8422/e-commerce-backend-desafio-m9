@@ -4,6 +4,7 @@ import methods from "micro-method-router";
 import { quitProductCart } from "controllers/cart";
 import * as yup from "yup";
 import { schemaQuery } from "lib/middlewares/schemaMiddleware";
+import { middlewareCors } from "lib/middlewares/cors";
 const querySchema = yup
   .object()
   .shape({
@@ -25,4 +26,6 @@ const deleteHandlerWithValidation = schemaQuery(querySchema, deleteHandler);
 const handler = methods({
   delete: deleteHandlerWithValidation,
 });
-export default authMiddleware(handler);
+const handlerWithValidation = authMiddleware(handler);
+
+export default middlewareCors(handlerWithValidation);

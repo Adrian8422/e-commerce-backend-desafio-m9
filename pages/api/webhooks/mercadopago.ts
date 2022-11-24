@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { middlewareMercadoPago } from "lib/middlewares/mercadopagoMiddle";
 import { checkOrderAndCreateBilling } from "controllers/orders";
+import { middlewareCors } from "lib/middlewares/cors";
 
 async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
@@ -16,4 +17,6 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
 const handler = methods({
   post: postHandler,
 });
-export default middlewareMercadoPago(handler);
+const handlerWithValidation = middlewareMercadoPago(handler);
+
+export default middlewareCors(handlerWithValidation);
