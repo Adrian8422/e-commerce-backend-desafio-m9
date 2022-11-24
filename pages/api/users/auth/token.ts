@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { authCodeReturnToken } from "controllers/auth";
 import * as yup from "yup";
 import { schemaAuth } from "lib/middlewares/schemaMiddleware";
+import { middlewareCors } from "lib/middlewares/cors";
 const bodySchema = yup
   .object()
   .shape({
@@ -26,4 +27,5 @@ async function postHanlder(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 }
-export default schemaAuth(bodySchema, postHanlder);
+const handlerAndValidation = schemaAuth(bodySchema, postHanlder);
+export default middlewareCors(handlerAndValidation);

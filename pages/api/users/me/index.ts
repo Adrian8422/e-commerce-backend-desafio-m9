@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import * as yup from "yup";
 import { schemaBody } from "lib/middlewares/schemaMiddleware";
+import { middlewareCors } from "lib/middlewares/cors";
 
 async function getHandler(req: NextApiRequest, res: NextApiResponse, token) {
   const user = await getDataUser(token.userId).catch((err) =>
@@ -43,4 +44,5 @@ const handler = methods({
   get: getHandler,
   patch: patchHandleWithValidation,
 });
-export default authMiddleware(handler);
+const handlerAndValidation = authMiddleware(handler);
+export default middlewareCors(handlerAndValidation);
