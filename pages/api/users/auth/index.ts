@@ -26,4 +26,6 @@ async function postHandler(
   res.send(response);
 }
 
-export default schemaAuth(bodySchema, postHandler);
+const handlerAndValidation = schemaAuth(bodySchema, postHandler);
+
+export default middlewareCors(handlerAndValidation);
