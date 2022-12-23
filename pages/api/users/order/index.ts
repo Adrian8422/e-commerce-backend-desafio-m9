@@ -30,8 +30,8 @@ async function postHanlder(req: NextApiRequest, res: NextApiResponse, token) {
   const respuesta = await createPreferenceAndOrderOneProductMp(
     productId,
     userId,
-    color,
-    version,
+    color?,
+    version?,
     quantity
   ).catch((err) => {
     res.status(400).send({ message: "no encontramos el producto", error: err });
