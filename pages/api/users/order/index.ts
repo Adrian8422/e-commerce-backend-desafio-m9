@@ -15,8 +15,8 @@ const querySchema = yup
 const bodySchema = yup
   .object()
   .shape({
-    color: yup.string(),
-    version: yup.string(),
+    color: yup.string().notRequired(),
+    version: yup.string().notRequired(),
     quantity: yup.number().required(),
   })
   .noUnknown(true)
