@@ -18,8 +18,8 @@ type CreateOrderResponse = {
 export async function createPreferenceAndOrderOneProductMp(
   productId,
   userId,
-  color,
-  version,
+  color?,
+  version?,
   quantity
 ): Promise<CreateOrderResponse> {
   const product = await getProductIdAlgolia(productId);
