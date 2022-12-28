@@ -3,7 +3,7 @@ import { User } from "models/user";
 type GetDataUser = {
   user: {
     address?: string;
-    birthday?: string;
+    cellphone?: string;
     createdAt: Date;
     email: string;
     name?: string;
@@ -19,7 +19,7 @@ export async function getDataUser(userId: string): Promise<GetDataUser> {
 type UpdateDataUser = {
   user: {
     address?: string;
-    birthday?: string;
+    cellphone?: string;
     createdAt: Date;
     email: string;
     name?: string;
