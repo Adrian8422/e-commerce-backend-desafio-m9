@@ -31,11 +31,11 @@ export async function patchUpdateDataUser(
   data?
 ): Promise<UpdateDataUser> {
   console.log("data en controller", data);
-  const { name, birthday, address } = data;
+  const { name, cellphone, address } = data;
   const user = new User(userId);
   await user.pull();
   user.data.name = name;
-  user.data.birthday = birthday;
+  user.data.cellphone = cellphone;
   user.data.address = address;
   await user.push();
   return user.data;

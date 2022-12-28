@@ -17,18 +17,18 @@ const bodySchema = yup
   .object()
   .shape({
     name: yup.string().notRequired(),
-    birthday: yup.string().notRequired(),
+    cellphone: yup.string().notRequired(),
     address: yup.string().notRequired(),
   })
   .noUnknown(true)
   .strict();
 
 async function patchHandler(req: NextApiRequest, res: NextApiResponse, token) {
-  const { name, birthday, address } = req.body;
+  const { name, cellphone, address } = req.body;
 
   const user = await patchUpdateDataUser(token.userId, {
     name,
-    birthday,
+    cellphone,
     address,
   }).catch((err) => {
     res.status(401).send({

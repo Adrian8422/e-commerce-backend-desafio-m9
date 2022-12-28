@@ -15,8 +15,6 @@ const querySchema = yup
 const bodySchema = yup
   .object()
   .shape({
-    color: yup.string(),
-    version: yup.string(),
     quantity: yup.number().required(),
   })
   .noUnknown(true)
@@ -24,14 +22,12 @@ const bodySchema = yup
 
 async function postHanlder(req: NextApiRequest, res: NextApiResponse, token) {
   const { productId } = req.query;
-  const { color, version, quantity } = req.body;
+  const { quantity } = req.body;
 
   const userId = token.userId;
   const respuesta = await createPreferenceAndOrderOneProductMp(
     productId,
     userId,
-    color,
-    version,
     quantity
   ).catch((err) => {
     res.status(400).send({ message: "no encontramos el producto", error: err });

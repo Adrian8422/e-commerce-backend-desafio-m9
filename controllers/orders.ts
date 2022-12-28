@@ -18,8 +18,6 @@ type CreateOrderResponse = {
 export async function createPreferenceAndOrderOneProductMp(
   productId,
   userId,
-  color,
-  version,
   quantity
 ): Promise<CreateOrderResponse> {
   const product = await getProductIdAlgolia(productId);
@@ -46,9 +44,6 @@ export async function createPreferenceAndOrderOneProductMp(
     status: "pending",
     createdAt: new Date(),
     aditional_info: {
-      color,
-      version,
-
       quantity: [{ id: product["objectID"], quantity: quantity }],
     },
   });
