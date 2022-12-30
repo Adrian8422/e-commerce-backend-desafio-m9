@@ -109,7 +109,7 @@ export async function quitAllProductsCart(idUser: string) {
 export async function changeQuantityProdInCart(idProd: string, newQuantity) {
   const product = await Cart.productCartGetById(idProd);
   if (!product) {
-    return { message: "no encontramos ese producto en el carrito" };
+    return { message: "no encontramos ese producto en el carrt" };
   }
   product.data.quantity = newQuantity;
   product.push();
