@@ -5,6 +5,7 @@ import * as yup from "yup";
 
 import {
   addProductInCart,
+  changeQuantityProdInCart,
   getMyCurrentCart,
   quitAllProductsCart,
 } from "controllers/cart";
@@ -38,6 +39,19 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse, token) {
 
   res.send(response);
 }
+async function changeQuantityInCart(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  token
+) {
+  const { id } = req.query;
+  const { quantity } = req.body;
+  const response = await changeQuantityProdInCart(
+    id as string,
+    quantity as number
+  ).catch((err) => res.status(401).send({ message: err }));
+  res.send(response);
+}
 async function getMyCart(req: NextApiRequest, res: NextApiResponse, token) {
   const userId = token.userId;
   const response = await getMyCurrentCart(userId).catch((err) =>
@@ -65,6 +79,7 @@ const handler = methods({
   delete: deleteAllProdutcsHandler,
   get: getMyCart,
   post: postHandlerWithValidation,
+  put: changeQuantityInCart,
 });
 const handlerWithValidation = authMiddleware(handler);
 
