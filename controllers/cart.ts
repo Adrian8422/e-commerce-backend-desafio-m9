@@ -22,6 +22,7 @@ export async function addProductInCart(
     console.log("no encontramos ese producto");
     return null;
   }
+  const getImagesProd = product["images"].find((img) => img.width < 100);
 
   ///Creacion de collection Cart (Carrito de compras)
   const addProductInCart = await Cart.createProductInCart({
@@ -33,6 +34,9 @@ export async function addProductInCart(
     quantity: quantity,
     productId: product["objectID"],
     userId: userId,
+    images: {
+      url: getImagesProd.url,
+    },
     createdAt: new Date(),
   });
 

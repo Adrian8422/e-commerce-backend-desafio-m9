@@ -135,6 +135,9 @@ export async function stockManagement(idProduct, cantidad) {
       console.log(err);
       return err;
     });
+  console.log("stock algolia");
+  const algoliaData = await productIndex.getObject(idProduct);
+  console.log({ algoliaData });
   const dataobj = await res;
   return dataobj.fields;
 }
