@@ -10,11 +10,15 @@ export async function addProductInCart(
 ) {
   const product = await getProductIdAlgolia(idProduct);
   if (product["stock"] == 0) {
-    return { message: "producto agotado, no podemos agregarlo al carrito" };
+    return {
+      message: "producto agotado, no podemos agregarlo al carrito",
+      error: true,
+    };
   }
   if (product["stock"] - quantity < 0) {
     return {
       message: `no hay esa cantidad de stock, solo quedan ${product["stock"]}`,
+      error: true,
     };
   }
 
