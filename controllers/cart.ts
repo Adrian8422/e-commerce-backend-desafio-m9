@@ -115,11 +115,25 @@ export async function quitAllProductsCart(idUser: string) {
 }
 
 export async function changeQuantityProdInCart(idProd: string, newQuantity) {
-  const product = await Cart.productCartGetById(idProd);
-  if (!product) {
+  const productInCart = await Cart.productCartGetById(idProd);
+  const product = await getProductIdAlgolia(idProd);
+  if (product["stock"] == 0) {
+    return {
+      message: "producto agotado, no podemos agregarlo al carrito",
+      error: true,
+    };
+  }
+  if (product["stock"] - newQuantity < 0) {
+    return {
+      message: `no hay esa cantidad de stock, solo quedan ${product["stock"]}`,
+      error: true,
+    };
+  }
+
+  if (!productInCart) {
     return { message: "no encontramos ese producto en el carrt" };
   }
-  product.data.quantity = newQuantity;
-  product.push();
-  return product;
+  productInCart.data.quantity = newQuantity;
+  productInCart.push();
+  return productInCart;
 }
