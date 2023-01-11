@@ -39,6 +39,7 @@ export async function createPreferenceAndOrderOneProductMp(
   /// Creacion de preference y orden en base de datos
   const order = await Order.createOrder({
     ownerId: product["ownerId"],
+    title: product["title"],
     productId: [product["objectID"]],
     userId: userId,
     status: "pending",

@@ -12,13 +12,13 @@ export async function addProductInCart(
   if (product["stock"] == 0) {
     return {
       message: "producto agotado, no podemos agregarlo al carrito",
-      error: true,
+      out_of_stock_error: true,
     };
   }
   if (product["stock"] - quantity < 0) {
     return {
       message: `no hay esa cantidad de stock, solo quedan ${product["stock"]}`,
-      error: true,
+      low_stock_error: true,
     };
   }
 
@@ -55,12 +55,17 @@ export async function createPreferenceAndOrder(userId: string) {
   const order = await Order.createOrder({
     ownerId: productsInCart[0].data.ownerId,
     productId: productsInCart.map((prod) => prod.data.productId),
+    title: productsInCart.map((prod) => prod.data.title),
     userId: userId,
     status: "pending",
     createdAt: new Date(),
     aditional_info: {
       quantity: productsInCart.map((prod) => {
-        return { id: prod.data.productId, quantity: prod.data.quantity };
+        return {
+          title: prod.data.title,
+          id: prod.data.productId,
+          quantity: prod.data.quantity,
+        };
       }),
     },
   });
@@ -97,7 +102,7 @@ export async function quitProductCart(idProduct: string) {
 export async function getMyCurrentCart(userId: string) {
   const products = await Cart.productsCartGetByUserId(userId);
   if (!products) {
-    return { message: "no hay productos en el carrito" };
+    return { message: "no hay productos en el carrito", error: true };
   }
   return products;
 }
