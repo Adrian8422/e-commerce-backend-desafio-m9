@@ -44,7 +44,7 @@ export async function addProductInCart(
     createdAt: new Date(),
   });
 
-  return addProductInCart.data;
+  return { response: addProductInCart.data, error: false };
 }
 /// Creacion de preference y orden en base de datos
 export async function createPreferenceAndOrder(userId: string) {
