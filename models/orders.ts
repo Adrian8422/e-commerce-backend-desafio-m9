@@ -30,7 +30,10 @@ export class Order {
   static async getMyOrders(userId) {
     const results = await collection.where("userId", "==", userId).get();
     if (results.empty) {
-      return { message: "no encontramos ninguna orden de este usuario" };
+      return {
+        error: true,
+        message: "no encontramos ninguna orden de este usuario",
+      };
     } else {
       return results.docs.map((order) => order.data());
     }
