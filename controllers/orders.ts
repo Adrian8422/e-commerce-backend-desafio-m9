@@ -62,13 +62,17 @@ export async function createPreferenceAndOrderOneProductMp(
         },
       ],
       back_urls: {
-        success: "https://portfolio-6357a.web.app/",
+        success:
+          "https://e-commerce-front-end-nextjs-desafio-m10.vercel.app/thanks",
         pending: "https://portfolio-6357a.web.app/",
       },
       notification_url:
         "https://e-commerce-backend-desafio-m9.vercel.app/api/webhooks/mercadopago",
       // "https://webhook.site/15eead9d-9d4c-4d53-8dc9-86ad7dba0dd4"
     });
+    await order.pull();
+    order.data.aditional_info.url_order = createPreferenceMp.init_point;
+    await order.push();
     return { url: createPreferenceMp.init_point };
   }
 }
