@@ -29,6 +29,7 @@ export async function addProductInCart(
     return null;
   }
   const getImagesProd = product["images"].find((img) => img.width < 100);
+  const now = new Date();
 
   ///Creacion de collection Cart (Carrito de compras)
   const addProductInCart = await Cart.createProductInCart({
@@ -44,7 +45,7 @@ export async function addProductInCart(
       url: getImagesProd.url,
     },
     createdAt: new Date(),
-    expires: addMinutes(new Date(), 1),
+    expires: addMinutes(now, 1),
   });
 
   return { response: addProductInCart.data, error: false };
@@ -108,13 +109,13 @@ export async function quitProductCart(idProduct: string) {
 export async function getMyCurrentCart(userId: string) {
   const products = await Cart.productsCartGetByUserId(userId);
 
-  products.find(async (item) => {
-    const dateExpired = item.data.expires.toDate();
-    const expiredCart = await Cart.thisCartExpired(dateExpired);
-    if (expiredCart == true) {
-      await quitAllProductsCart(userId);
-    }
-  });
+  // products.map(async (item) => {
+  //   const dateExpired = item.data.expires.toDate();
+  //   const expiredCart = await Cart.thisCartExpired(dateExpired);
+  //   if (expiredCart == true) {
+  //     await quitAllProductsCart(userId);
+  //   }
+  // });
 
   if (!products) {
     return { message: "no hay productos en el carrito", error: true };
