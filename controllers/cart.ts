@@ -2,6 +2,8 @@ import { createPreference } from "lib/connections/mercadopago";
 import { Cart } from "models/cart";
 import { Order } from "models/orders";
 import { getProductIdAlgolia } from "./products";
+import addHours from "date-fns/addHours";
+import { addMinutes } from "date-fns";
 
 export async function addProductInCart(
   idProduct,
@@ -42,6 +44,7 @@ export async function addProductInCart(
       url: getImagesProd.url,
     },
     createdAt: new Date(),
+    expires: addMinutes(new Date(), 1),
   });
 
   return { response: addProductInCart.data, error: false };
@@ -104,6 +107,15 @@ export async function quitProductCart(idProduct: string) {
 }
 export async function getMyCurrentCart(userId: string) {
   const products = await Cart.productsCartGetByUserId(userId);
+
+  products.find(async (item) => {
+    const dateExpired = item.data.expires.toDate();
+    const expiredCart = await Cart.thisCartExpired(dateExpired);
+    if (expiredCart == true) {
+      await quitAllProductsCart(userId);
+    }
+  });
+
   if (!products) {
     return { message: "no hay productos en el carrito", error: true };
   }

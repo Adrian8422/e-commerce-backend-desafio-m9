@@ -1,3 +1,4 @@
+import { isAfter } from "date-fns";
 import { firestore } from "lib/connections/firestore";
 const collection = firestore.collection("cart");
 export class Cart {
@@ -28,6 +29,11 @@ export class Cart {
       newProdCart.data = prod.data();
       return newProdCart;
     });
+  }
+  static thisCartExpired(dateCreated) {
+    const now = new Date();
+
+    return isAfter(now, dateCreated);
   }
 
   static async destroyCart(id) {
