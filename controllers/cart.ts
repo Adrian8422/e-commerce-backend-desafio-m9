@@ -3,7 +3,6 @@ import { Cart } from "models/cart";
 import { Order } from "models/orders";
 import { getProductIdAlgolia } from "./products";
 import addHours from "date-fns/addHours";
-import { addMinutes } from "date-fns";
 
 export async function addProductInCart(
   idProduct,
@@ -45,7 +44,8 @@ export async function addProductInCart(
       url: getImagesProd.url,
     },
     createdAt: new Date(),
-    expires: addMinutes(now, 1),
+    expires: addHours(now, 1),
+    ///ver como calcular la expiracion y que matchee si se llego a la hora que sale en expires que se vacie el carro y sino que se mantenga
   });
 
   return { response: addProductInCart.data, error: false };
