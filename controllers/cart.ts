@@ -44,8 +44,7 @@ export async function addProductInCart(
       url: getImagesProd.url,
     },
     createdAt: new Date(),
-    expires: addHours(now, 1),
-    ///ver como calcular la expiracion y que matchee si se llego a la hora que sale en expires que se vacie el carro y sino que se mantenga
+    expires: addHours(now, 4),
   });
 
   return { response: addProductInCart.data, error: false };
