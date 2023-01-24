@@ -85,7 +85,8 @@ export async function createPreferenceAndOrder(userId: string) {
       unit_price: producto.data.price,
     })),
     back_urls: {
-      success: "https://portfolio-6357a.web.app/",
+      success:
+        "https://e-commerce-front-end-nextjs-desafio-m10.vercel.app/thanks",
       pending: "https://portfolio-6357a.web.app/",
     },
     notification_url:
