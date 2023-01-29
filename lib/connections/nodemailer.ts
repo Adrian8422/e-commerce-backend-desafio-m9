@@ -14,7 +14,7 @@ export function transporter() {
 export async function sendEmailToUser(emailUser, code) {
   await transporter()
     .sendMail({
-      from: '"Forgot password 👻" <manbassman1996@gmail.com>', // sender address
+      from: '"E-commerce APX" <manbassman1996@gmail.com>', // sender address
       to: emailUser, // list of receivers
       subject: ` `, // Subject line
       text: ` `, // plain text body
@@ -28,7 +28,7 @@ export async function sendEmailToUser(emailUser, code) {
 export async function sendEmailSuccessSale(emailUser) {
   await transporter()
     .sendMail({
-      from: '"Forgot password 👻" <manbassman1996@gmail.com>', // sender address
+      from: '"E-commerce APX" <manbassman1996@gmail.com>', // sender address
       to: emailUser, // list of receivers
       subject: ` `, // Subject line
       text: ` `, // plain text body

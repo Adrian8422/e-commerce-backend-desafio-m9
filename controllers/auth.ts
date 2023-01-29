@@ -4,9 +4,10 @@ import gen from "random-seed";
 import addMinutes from "date-fns/addMinutes";
 import { sendEmailToUser } from "lib/connections/nodemailer";
 import { generate } from "lib/functions/jwt";
+import { getRandomValues } from "crypto";
 
 //// Create code random
-var seed = "VARIABLEN";
+var seed = "asas";
 var random = gen.create(seed);
 
 export async function findOrCreateAuthAndUser(email: string) {
@@ -40,7 +41,8 @@ type SendMessage = {
 
 export async function sendCode(email: string): Promise<SendCode | SendMessage> {
   const auth = await findOrCreateAuthAndUser(email);
-  const code = random.intBetween(100000, 999999);
+  const code = generateCodeRandom();
+  // let code = random.intBetween(10000, 99999);
   const now = new Date();
   const inTwentyMinutesExpires = addMinutes(now, 5);
 
@@ -85,4 +87,8 @@ export async function authCodeReturnToken(
     console.log("token generado");
     return { token };
   }
+}
+function generateCodeRandom() {
+  var randNum = Math.floor(Math.random() * 90000) + 10000;
+  return randNum;
 }
