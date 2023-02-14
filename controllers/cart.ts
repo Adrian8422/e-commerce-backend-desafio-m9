@@ -45,8 +45,8 @@ export async function addProductInCart(
       url: getImagesProd.url,
     },
     createdAt: new Date(),
-    // expires: addHours(now, 4),
-    expires: addMinutes(now, 1),
+    expires: addHours(now, 4),
+    // expires: addMinutes(now, 1),
   });
 
   return { response: addProductInCart.data, error: false };
