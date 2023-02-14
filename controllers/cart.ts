@@ -3,6 +3,7 @@ import { Cart } from "models/cart";
 import { Order } from "models/orders";
 import { getProductIdAlgolia } from "./products";
 import addHours from "date-fns/addHours";
+import { addMinutes } from "date-fns";
 
 export async function addProductInCart(
   idProduct,
@@ -44,7 +45,8 @@ export async function addProductInCart(
       url: getImagesProd.url,
     },
     createdAt: new Date(),
-    expires: addHours(now, 4),
+    // expires: addHours(now, 4),
+    expires: addMinutes(now, 1),
   });
 
   return { response: addProductInCart.data, error: false };
