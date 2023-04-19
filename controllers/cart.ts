@@ -28,7 +28,8 @@ export async function addProductInCart(
     console.log("no encontramos ese producto");
     return null;
   }
-  const getImagesProd = product["images"].find((img) => img.width < 100);
+  // const getImagesProd = product["images"].find((img) => img.width < 100);
+  const getImagesProd = product["images"][0].thumbnails.small;
   const now = new Date();
 
   ///Creacion de collection Cart (Carrito de compras)
