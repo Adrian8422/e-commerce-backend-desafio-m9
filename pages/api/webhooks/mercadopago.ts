@@ -12,7 +12,7 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
 
   res
     .status(200)
-    .send({ message: "todo salio ok tenes un producto para enviar" });
+    .send({ message: "todo salio bien tenes un producto para enviar" });
 }
 const handler = methods({
   post: postHandler,
