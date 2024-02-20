@@ -14,7 +14,7 @@ export async function findOrCreateAuthAndUser(email: string) {
   const auth = await Auth.findByEmail(email);
 
   if (auth) {
-    console.log("encontramos el registro");
+    console.log("find register");
     return auth;
   } else {
     const newUser = await User.createNewUser({
