@@ -5,4 +5,4 @@ Airtable.configure({
 });
 export const airtableBase = Airtable.base(process.env.ID_BASE_APP_AIRTABLE);
 
-console.log("aitabel baseSS", airtableBase);
+console.log("aitabel base", airtableBase);
